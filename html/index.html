@@ -1,0 +1,210 @@
+<!-- index.html for elappendix-->
+<!-- 2019.06.12 -->
+
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<link rel="stylesheet" href="lib/bootstrap/css/bootstrap.min.css">
+<link rel="stylesheet" href="lib/fontawesome-free/css/all.css">
+<title>ECHONET Lite Appendix Viewer</title>
+<style>
+body {
+  padding-top: 1rem;
+}
+table td, th{
+  word-break: break-all;
+  overflow-wrap : break-word;
+	font-family: Consolas, 'Courier New', Courier, Monaco, monospace;
+	font-size: 90%;
+	padding: 0.2em 1em;
+	cursor: pointer;
+/*	border-top: 1px solid #cccccc;*/
+}
+.card-deck {
+	margin-bottom: 20px;
+}
+.card-header {
+	padding: 0.1em 1em;
+}
+.card-contents {
+	height: 40em;
+	overflow-y: scroll;
+}
+.col1 {width: 12em;} /* プロパティ */
+.col2 {width: 5em;} /* EPC */
+.col3 {width: 12em;} /* 値域 */
+.col4 {width: 10em;} /* データ型 */
+.col5 {width: 4em;} /* データサイズ */
+.col6 {width: 6em;} /* 単位 */
+.col7 {width: 6em;} /* アクセスルール */
+.col8 {width: 4em;} /* 必須 */
+.col9 {width: 4em;} /* 状変時 */
+.col10 {width: 4em;} /* 備考 */
+.card-body {
+	margin: 0;
+	padding: 0;
+}
+#wrapper {
+	height: 40em;
+	overflow-y: scroll;
+}
+</style>
+</head>
+
+<body>
+<header>
+</header>
+<main>
+<div class="container" id="app">
+    <div class="card">
+	<!-- header -->
+        <div class="card-header py-1">
+            <div class="row">
+
+                <div class="col-auto pl-2">
+                  <select class="custom-select" v-model="deviceSelected" v-on:change="updateDevice">
+                    <option v-for="device in deviceList" v-bind:value="device.eoj">
+                      {{ device.name }}
+                    </option>
+                  </select>
+                </div>
+
+                <div class="col-1">
+                  <select class="custom-select" v-model="releaseSelected" v-on:change="updateRelease">
+                    <option v-for="release in releaseList" v-bind:value="release.name">
+                      {{ release.name }}
+                    </option>
+                  </select>
+                </div>
+
+                <div class="col"></div>
+              
+                <div class="col-auto pl-0">
+                    <div class="input-group border ml-2">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">View</span>
+                        </div>
+                        <div class="form-check form-check-inline pl-2">
+                            <input type="radio" class="form-check-input" id="standard" v-model="rbView" value="standard" v-on:change="updateView">
+                            <label for="standard" class="form-check-label">standard</label>
+                        </div>
+                        <div class="form-check form-check-inline pl-0 mr-0">
+                            <input type="radio" class="form-check-input" id="specSheet" v-model="rbView" value="specSheet" v-on:change="updateView">
+                            <label for="specSheet" class="form-check-label ">spec sheet</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-auto pl-0">
+                    <div class="input-group border ml-2">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">Language</span>
+                        </div>
+                        <div class="form-check form-check-inline pl-2">
+                            <input type="radio" class="form-check-input" id="japanese" v-model="rbLanguage" value="japanese" v-on:change="updateLanguage">
+                            <label for="japanese" class="form-check-label">Japanese</label>
+                        </div>
+                        <div class="form-check form-check-inline pl-0 mr-0">
+                            <input type="radio" class="form-check-input" id="english" v-model="rbLanguage" value="english" v-on:change="updateLanguage">
+                            <label for="english" class="form-check-label ">English</label>
+                        </div>
+                    </div>
+                </div>              
+
+            </div>
+        </div>
+	<!-- body -->
+        <div class="card-body">
+          <table class="table border my-0">
+            <theader>
+                <tr>
+                  <th scope="col" class="col1">プロパティ</th>
+                  <th scope="col" class="col2">EPC</th>
+                  <th scope="col" class="col3">値域</th>
+                  <th scope="col" class="col4">データ型</th>
+                  <th scope="col" class="col5">データサイズ</th>
+                  <th scope="col" class="col6">単位</th>
+                  <th scope="col" class="col7">アクセスルール</th>
+                  <th scope="col" class="col8">必須</th>
+                  <th scope="col" class="col9">状変時アナウンス</th>
+                  <th scope="col" class="col10">備考</th>
+                </tr>
+            </theader>
+          </table>
+
+          <div id="wrapper">
+            <table class="table">
+              <tbody>
+                <tr v-for="appendix in appendix_list" v-bind:id="appendix.id" tabindex="0" >
+                  <td class="col1">{{ appendix.name }}</td>
+                  <td class="col2">{{ appendix.epc }}</td>
+<!--
+                  <template v-if="appendix.propType === 'number'">
+                    <td class="col3">{{ appendix.range }}</td>
+                  </template>
+-->
+<!--
+                  <template v-else-if="appendix.propType === 'level'">
+                    <td class="col3">{{ appendix.range }}</td>
+                  </template>
+-->
+<!--                  <template v-else-if="appendix.propType === 'state'">-->
+                  <template v-if="appendix.propType === 'state'">
+                    <table>
+                      <tr v-for="item in appendix.range" tabindex="0" >
+                        <td class="col3">{{ item.edt }}:{{ item.state.ja }}</td>
+                    </table>
+                  </template>
+                  <template v-else-if="appendix.propType === 'numericValue'">
+                    <table>
+                      <tr v-for="item in appendix.range" tabindex="0" >
+                        <td class="col3">{{ item.edt }}:{{ item.numericValue }}</td>
+                    </table>
+                  </template>
+<!--
+                  <template v-else-if="appendix.propType === 'array'">
+                    <td class="col3">{{ appendix.range }}</td>
+                  </template>
+-->
+                  <template v-else>
+                    <td class="col3">{{ appendix.range }}</td>
+                  </template>
+                  <td class="col4">{{ appendix.dataType }}</td>
+                  <td class="col5">{{ appendix.dataSize }}</td>
+                  <td class="col6">{{ appendix.unit }}</td>
+                  <td class="col7">{{ appendix.accessRule }}</td>
+                  <td class="col8">{{ appendix.accessRuleRequired }}</td>
+                  <td class="col9">{{ appendix.inf }}</td>
+<!--                  <td class="col10">{{ appendix.note }}</td>-->
+                  <template v-if="appendix.note === 'empty'">
+                      <td class="col10"></td>
+                  </template>
+                  <template v-else>
+                    <td class="col10" v-on:click="showEdtDetailModal" data-number="1">
+                        <i class="fas fa-info-circle">{{ appendix.epc }}</i>
+                    </td>
+                  </template>
+                </tr>
+              </tbody>
+            </table>
+            </div>
+
+      
+        </div>
+
+    </div>
+</div>
+</main>
+
+<script src="lib/jquery-3.3.1.min.js"></script>
+<script src="lib/bootstrap/js/bootstrap.min.js"></script>
+<script src="lib/vue.min.js"></script>
+<script src="lib/vue-router.min.js"></script>
+<script src="elDeviceDescription.js"></script>
+<script src="parseJSON.js"></script>
+<script src="elDdViewer.js"></script>
+<!--<script src="test.js"></script>-->
+</body>
+</html>

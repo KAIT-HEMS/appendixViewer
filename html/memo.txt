@@ -1,0 +1,6 @@
+memo	2019.05.07
+
+Node.jsを利用したWebAPL版ではなく、
+クライアント側のHTML/CSS/JavaScriptのみで動作するバージョン。
+DeviceDescriptionはJavaScriptとして読み込む。
+
