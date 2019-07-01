@@ -13,7 +13,7 @@
     <div class="navbar navbar-dark bg-dark shadow-sm">
       <div class="container d-flex justify-content-between">
         <a href="#" class="navbar-brand">
-          <h1 id="edt-detail-title" class="h6"></h1>
+          <h1 id="note-title" class="h6"></h1>
         </a>
       </div>
     </div>
@@ -21,7 +21,8 @@
   <main role="main">
     <div class="pt-3">
       <div class="container">
-        <pre id="edt-detail-json"></pre>
+<!--        <pre id="note-content"></pre>-->
+        <p id="note-content"></p>
       </div>
     </div>
   </main>
@@ -41,10 +42,10 @@
     }, false);
 
     function showContents() {
-      let title = window.localStorage.getItem('edt-detail-title');
-      let json = window.localStorage.getItem('edt-detail-json');
-      $('#edt-detail-title').text(title);
-      $('#edt-detail-json').text(json);
+      let title = window.localStorage.getItem('note-title');
+      let content = window.localStorage.getItem('note-content');
+      $('#note-title').text(title);
+      $('#note-content').text(content);
     }
 
   </script>

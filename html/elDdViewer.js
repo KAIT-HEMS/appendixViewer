@@ -1,10 +1,11 @@
 // elDdviewer.js
-// 2019.06.11
+// 2019.06.13
 
+let globalNotes = {};   // 備考欄のデータを保持するため
 var vm = new Vue({
     el: '#app',
     data: {
-        rbView: 'standard',
+        rbView: 'specSheet',
         rbLanguage: 'japanese',
         appendix_list: [],  // v-for で使う
         packetDetail: '',
@@ -30,15 +31,11 @@ var vm = new Vue({
             console.log("updateLanguage, rbLanguage:", this.rbLanguage);
             refresh();
         },
-        showEdtDetailModal: function () {
-            console.log("showEdtDetailModal");
-        	let number = event.currentTarget.getAttribute('data-number');
-            console.log("number= ", number);
-        },
-		// パケット一覧からパケット行がクリックされたときの処理 (パケット詳細を表示)
-		showPacketDetail: this.packetMonitorShowPacketDetail.bind(this),
-		// パケット一覧で矢印キーが押されたときの処理
-		upDownList: this.packetMonitorUpDownList.bind(this)
+        showNote: function (noteEpc) {
+        	window.localStorage.setItem('note-title', 'Note for EPC = ' + noteEpc);
+        	window.localStorage.setItem('note-content', globalNotes[noteEpc]);
+        	window.open('note.html', 'note', 'width=600,height=300');
+        }
     }
 });
 
@@ -46,7 +43,7 @@ init();
 refresh();
 
 function init() {
-    console.log("JSON data Date:", jsonData.metaData.date, "Relase:", jsonData.metaData.release, "Version:", jsonData.metaData.version);
+    console.log("init() JSON data Date:", jsonData.metaData.date, "Relase:", jsonData.metaData.release, "Version:", jsonData.metaData.version);
     const latestRelease = jsonData.metaData.release;
     vm.releaseSelected = latestRelease;
 }
@@ -57,7 +54,7 @@ function refresh() {
     let selectedRelease = vm.releaseSelected;
     const selectedView = vm.rbView;
     const selectedLanguage = vm.rbLanguage;
-    console.log("EOJ:", selectedEoj, " Release:", selectedRelease, " View:", selectedView, "Language:", selectedLanguage);
+    console.log("refresh() EOJ:", selectedEoj, " Release:", selectedRelease, " View:", selectedView, "Language:", selectedLanguage);
 
     // Appendixのrelease選択の要素を作成
     let firstRelease = 'Z';
@@ -90,13 +87,21 @@ function refresh() {
     let deviceList = [];
     for (const eoj of Object.keys(jsonData.devices)) {
         if (!jsonData.devices[eoj].oneOf) {
-            deviceList.push({name:jsonData.devices[eoj].className.ja, eoj:eoj});
+            if (vm.rbLanguage == 'japanese') {
+                deviceList.push({name:(eoj + ' ' + jsonData.devices[eoj].className.ja), eoj:eoj});
+            } else {
+                deviceList.push({name:(eoj + ' ' + jsonData.devices[eoj].className.en), eoj:eoj});
+            }
         } else {
             for (let object of jsonData.devices[eoj].oneOf) {
                 const validFrom = object.validRelease.from;
                 const validTo = (object.validRelease.to == 'latest') ? latestRelease : object.validRelease.to;
                 if ((validFrom <= selectedRelease) && ( selectedRelease <= validTo )) {
-                    deviceList.push({name:object.className.ja, eoj:eoj});
+                    if (vm.rbLanguage == 'japanese') {
+                        deviceList.push({name:(eoj + ' ' + object.className.ja), eoj:eoj});
+                    } else {
+                        deviceList.push({name:(eoj + ' ' + object.className.en), eoj:eoj});
+                    }
                     break;
                 }
             }
@@ -107,8 +112,10 @@ function refresh() {
     // 選択された機器のDevice Objectを作成（その後の作業で中身をいじるため、コピーする）
     let deviceObjectOriginal = getDeviceDescriptionObj(selectedEoj, selectedRelease);
     let deviceObject = JSON.parse(JSON.stringify(deviceObjectOriginal));
+//     console.log('refresh() deviceObjectOriginal', deviceObjectOriginal);
     
     let id = 0; // index for v-for.
+//     noteNumber =1;
     vm.appendix_list = [];
     for (const [key, property] of Object.entries(deviceObject.elProperties)) {
         let indexObject = null;
@@ -149,7 +156,11 @@ function createAppendixList(key, property, id, indexObject, indexOneOf) {
     let appendix = {};
     let pushFlag = true;
     appendix.epc = key;
-    appendix.name = property.propertyName.ja;
+    if (vm.rbLanguage == 'japanese') {
+        appendix.name = property.propertyName.ja;
+    } else {
+        appendix.name = property.propertyName.en;
+    }
     if (property.accessRule.get == "notApplicable") {
         appendix.accessRule = "Set";
     } else if  (property.accessRule.set == "notApplicable") {
@@ -159,12 +170,19 @@ function createAppendixList(key, property, id, indexObject, indexOneOf) {
     }
     if ((property.accessRule.get == "required") || (property.accessRule.set == "required")){
         appendix.accessRuleRequired = "○";
+    } else if ((property.accessRule.get == "required_c") || (property.accessRule.set == "required_c")){
+        appendix.accessRuleRequired = "○*";
     }
     if (property.accessRule.inf == "required") {
         appendix.inf = "○";
     }
     if (property.note) {
-        appendix.note = property.note.ja;
+        appendix.note = key;
+        if (vm.rbLanguage == 'japanese') {
+            globalNotes[key] = property.note.ja;
+        } else {
+            globalNotes[key] = property.note.en;
+        }
     } else {
         appendix.note = 'empty';
     }
@@ -177,7 +195,7 @@ function createAppendixList(key, property, id, indexObject, indexOneOf) {
             break;
         case 'number':
             appendix.propType = 'number';
-            // maxには３けた区切りのコンマを追加
+            // ３けた区切りのコンマを追加
             appendix.range = (new Intl.NumberFormat().format(property.data.minimum)) + ' ~ ' + (new Intl.NumberFormat().format(property.data.maximum));
             appendix.dataType = property.data.format;
             appendix.unit = property.data.unit;

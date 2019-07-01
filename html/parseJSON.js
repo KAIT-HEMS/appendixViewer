@@ -22,7 +22,7 @@
 // output: object:device description object
 // note: oneOfと$refを処理したものがreturnされる
 function getDeviceDescriptionObj(selectedEoj, selectedRelease) {
-//   console.log("EOJ:", selectedEoj, " Release:", selectedRelease);
+  console.log("EOJ:", selectedEoj, " Release:", selectedRelease);
 //   console.log("JSON data Date:", jsonData.metaData.date, "Relase:", jsonData.metaData.release, "Version:", jsonData.metaData.version);
 
   // replace $ref in definitions
@@ -30,9 +30,7 @@ function getDeviceDescriptionObj(selectedEoj, selectedRelease) {
   for (const [key, value] of Object.entries(definitions)) {
     definitions[key] = replaceRef(value);
   }
-//   console.log("definitions=",definitions);
-  
-  let deviceObject = Object.assign({}, jsonData.devices[selectedEoj]);  // copy object
+  let deviceObject = JSON.parse(JSON.stringify(jsonData.devices[selectedEoj]));   // copy object
   const latestRelease = jsonData.metaData.release;
 
   // device object：oneOfの選択とselectedReleaseの確認

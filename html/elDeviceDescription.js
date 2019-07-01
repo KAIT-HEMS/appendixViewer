@@ -1,6 +1,6 @@
 const jsonData = {
     "metaData":{
-        "date":"2019-06-11",
+        "date":"2019-06-14",
         "release":"K",
         "version":"3.1.0"
     },
@@ -970,8 +970,8 @@ const jsonData = {
                     {"edt":"0x41", "state":{"ja":"時刻予約、相対時間予約共に入",
                      "en":"Both the time- and relative time-based reservation functions are ON"}},
                     {"edt":"0x42", "state":{"ja":"予約切", "en":"Both reservation functions are OFF"}},
-                    {"edt":"0x43", "state":{"ja":"時刻予約のみ入", "en":"Time--based reservation functions is ON"}},
-                    {"edt":"0x44", "state":{"ja":"相対時間予約のみ入", "en":"Relative time--based reservation functions is ON"}}
+                    {"edt":"0x43", "state":{"ja":"時刻予約のみ入", "en":"Time-based reservation functions is ON"}},
+                    {"edt":"0x44", "state":{"ja":"相対時間予約のみ入", "en":"Relative time-based reservation functions is ON"}}
                 ]
             }
         },
@@ -1004,8 +1004,8 @@ const jsonData = {
                     {"edt":"0x41", "state":{"ja":"時刻予約、相対時間予約共に入",
                      "en":"Both the time- and relative time-based reservation functions are ON"}},
                     {"edt":"0x42", "state":{"ja":"予約切", "en":"Both reservation functions are OFF"}},
-                    {"edt":"0x43", "state":{"ja":"時刻予約のみ入", "en":"Time--based reservation functions is ON"}},
-                    {"edt":"0x44", "state":{"ja":"相対時間予約のみ入", "en":"Relative time--based reservation functions is ON"}}
+                    {"edt":"0x43", "state":{"ja":"時刻予約のみ入", "en":"Time-based reservation functions is ON"}},
+                    {"edt":"0x44", "state":{"ja":"相対時間予約のみ入", "en":"Relative time-based reservation functions is ON"}}
                 ]
             }
         },
@@ -2235,11 +2235,8 @@ const jsonData = {
                 "type":"state",
                 "size":1,
                 "enum":[
-                    {"edt":"0x41", "state":{"ja":"時刻予約、相対時間予約共に入",
-                     "en":"Both the time- and relative time-based reservation functions are ON"}},
-                    {"edt":"0x42", "state":{"ja":"予約切", "en":"Both reservation functions are OFF"}},
-                    {"edt":"0x43", "state":{"ja":"時刻予約のみ入", "en":"Time--based reservation functions is ON"}},
-                    {"edt":"0x44", "state":{"ja":"相対時間予約のみ入", "en":"Relative time--based reservation functions is ON"}}
+                    {"edt":"0x41", "state":{"ja":"ON","en":"ON"}},
+                    {"edt":"0x42", "state":{"ja":"OFF", "en":"OFF"}}
                 ]
             }
         },
@@ -2532,11 +2529,8 @@ const jsonData = {
                 "type":"state",
                 "size":1,
                 "enum":[
-                    {"edt":"0x41", "state":{"ja":"時刻予約、相対時間予約共に入",
-                     "en":"Both the time- and relative time-based reservation functions are ON"}},
-                    {"edt":"0x42", "state":{"ja":"予約切", "en":"Both reservation functions are OFF"}},
-                    {"edt":"0x43", "state":{"ja":"時刻予約のみ入", "en":"Time--based reservation functions is ON"}},
-                    {"edt":"0x44", "state":{"ja":"相対時間予約のみ入", "en":"Relative time--based reservation functions is ON"}}
+                    {"edt":"0x41", "state":{"ja":"ON","en":"ON"}},
+                    {"edt":"0x42", "state":{"ja":"OFF", "en":"OFF"}}
                 ]
             }
         },
@@ -3587,11 +3581,8 @@ const jsonData = {
                 "type":"state",
                 "size":1,
                 "enum":[
-                    {"edt":"0x41", "state":{"ja":"時刻予約、相対時間予約共に入",
-                     "en":"Both the time- and relative time-based reservation functions are ON"}},
-                    {"edt":"0x42", "state":{"ja":"予約切", "en":"Both reservation functions are OFF"}},
-                    {"edt":"0x43", "state":{"ja":"時刻予約のみ入", "en":"Time--based reservation functions is ON"}},
-                    {"edt":"0x44", "state":{"ja":"相対時間予約のみ入", "en":"Relative time--based reservation functions is ON"}}
+                    {"edt":"0x41", "state":{"ja":"ON","en":"ON"}},
+                    {"edt":"0x42", "state":{"ja":"OFF", "en":"OFF"}}
                 ]
             }
         },
@@ -3907,11 +3898,8 @@ const jsonData = {
                 "type":"state",
                 "size":1,
                 "enum":[
-                    {"edt":"0x41", "state":{"ja":"時刻予約、相対時間予約共に入",
-                     "en":"Both the time- and relative time-based reservation functions are ON"}},
-                    {"edt":"0x42", "state":{"ja":"予約切", "en":"Both reservation functions are OFF"}},
-                    {"edt":"0x43", "state":{"ja":"時刻予約のみ入", "en":"Time--based reservation functions is ON"}},
-                    {"edt":"0x44", "state":{"ja":"相対時間予約のみ入", "en":"Relative time--based reservation functions is ON"}}
+                    {"edt":"0x41", "state":{"ja":"ON","en":"ON"}},
+                    {"edt":"0x42", "state":{"ja":"OFF", "en":"OFF"}}
                 ]
             }
         },
@@ -3941,11 +3929,8 @@ const jsonData = {
                 "type":"state",
                 "size":1,
                 "enum":[
-                    {"edt":"0x41", "state":{"ja":"時刻予約、相対時間予約共に入",
-                     "en":"Both the time- and relative time-based reservation functions are ON"}},
-                    {"edt":"0x42", "state":{"ja":"予約切", "en":"Both reservation functions are OFF"}},
-                    {"edt":"0x43", "state":{"ja":"時刻予約のみ入", "en":"Time--based reservation functions is ON"}},
-                    {"edt":"0x44", "state":{"ja":"相対時間予約のみ入", "en":"Relative time--based reservation functions is ON"}}
+                    {"edt":"0x41", "state":{"ja":"ON","en":"ON"}},
+                    {"edt":"0x42", "state":{"ja":"OFF", "en":"OFF"}}
                 ]
             }
         },
@@ -4304,11 +4289,8 @@ const jsonData = {
                 "type":"state",
                 "size":1,
                 "enum":[
-                    {"edt":"0x41", "state":{"ja":"時刻予約、相対時間予約共に入",
-                     "en":"Both the time- and relative time-based reservation functions are ON"}},
-                    {"edt":"0x42", "state":{"ja":"予約切", "en":"Both reservation functions are OFF"}},
-                    {"edt":"0x43", "state":{"ja":"時刻予約のみ入", "en":"Time--based reservation functions is ON"}},
-                    {"edt":"0x44", "state":{"ja":"相対時間予約のみ入", "en":"Relative time--based reservation functions is ON"}}
+                    {"edt":"0x41", "state":{"ja":"ON","en":"ON"}},
+                    {"edt":"0x42", "state":{"ja":"OFF", "en":"OFF"}}
                 ]
             }
         },
@@ -4338,11 +4320,8 @@ const jsonData = {
                 "type":"state",
                 "size":1,
                 "enum":[
-                    {"edt":"0x41", "state":{"ja":"時刻予約、相対時間予約共に入",
-                     "en":"Both the time- and relative time-based reservation functions are ON"}},
-                    {"edt":"0x42", "state":{"ja":"予約切", "en":"Both reservation functions are OFF"}},
-                    {"edt":"0x43", "state":{"ja":"時刻予約のみ入", "en":"Time--based reservation functions is ON"}},
-                    {"edt":"0x44", "state":{"ja":"相対時間予約のみ入", "en":"Relative time--based reservation functions is ON"}}
+                    {"edt":"0x41", "state":{"ja":"ON","en":"ON"}},
+                    {"edt":"0x42", "state":{"ja":"OFF", "en":"OFF"}}
                 ]
             }
         },
@@ -4553,11 +4532,8 @@ const jsonData = {
                 "type":"state",
                 "size":1,
                 "enum":[
-                    {"edt":"0x41", "state":{"ja":"時刻予約、相対時間予約共に入",
-                     "en":"Both the time- and relative time-based reservation functions are ON"}},
-                    {"edt":"0x42", "state":{"ja":"予約切", "en":"Both reservation functions are OFF"}},
-                    {"edt":"0x43", "state":{"ja":"時刻予約のみ入", "en":"Time--based reservation functions is ON"}},
-                    {"edt":"0x44", "state":{"ja":"相対時間予約のみ入", "en":"Relative time--based reservation functions is ON"}}
+                    {"edt":"0x41", "state":{"ja":"ON","en":"ON"}},
+                    {"edt":"0x42", "state":{"ja":"OFF", "en":"OFF"}}
                 ]
             }
         },
@@ -4587,11 +4563,8 @@ const jsonData = {
                 "type":"state",
                 "size":1,
                 "enum":[
-                    {"edt":"0x41", "state":{"ja":"時刻予約、相対時間予約共に入",
-                     "en":"Both the time- and relative time-based reservation functions are ON"}},
-                    {"edt":"0x42", "state":{"ja":"予約切", "en":"Both reservation functions are OFF"}},
-                    {"edt":"0x43", "state":{"ja":"時刻予約のみ入", "en":"Time--based reservation functions is ON"}},
-                    {"edt":"0x44", "state":{"ja":"相対時間予約のみ入", "en":"Relative time--based reservation functions is ON"}}
+                    {"edt":"0x41", "state":{"ja":"ON","en":"ON"}},
+                    {"edt":"0x42", "state":{"ja":"OFF", "en":"OFF"}}
                 ]
             }
         },
@@ -4795,11 +4768,8 @@ const jsonData = {
                 "type":"state",
                 "size":1,
                 "enum":[
-                    {"edt":"0x41", "state":{"ja":"時刻予約、相対時間予約共に入",
-                     "en":"Both the time- and relative time-based reservation functions are ON"}},
-                    {"edt":"0x42", "state":{"ja":"予約切", "en":"Both reservation functions are OFF"}},
-                    {"edt":"0x43", "state":{"ja":"時刻予約のみ入", "en":"Time--based reservation functions is ON"}},
-                    {"edt":"0x44", "state":{"ja":"相対時間予約のみ入", "en":"Relative time--based reservation functions is ON"}}
+                    {"edt":"0x41", "state":{"ja":"ON","en":"ON"}},
+                    {"edt":"0x42", "state":{"ja":"OFF", "en":"OFF"}}
                 ]
             }
         },
@@ -10383,11 +10353,8 @@ const jsonData = {
                 "type":"state",
                 "size":1,
                 "enum":[
-                    {"edt":"0x41", "state":{"ja":"時刻予約、相対時間予約共に入",
-                     "en":"Both the time- and relative time-based reservation functions are ON"}},
-                    {"edt":"0x42", "state":{"ja":"予約切", "en":"Both reservation functions are OFF"}},
-                    {"edt":"0x43", "state":{"ja":"時刻予約のみ入", "en":"Time--based reservation functions is ON"}},
-                    {"edt":"0x44", "state":{"ja":"相対時間予約のみ入", "en":"Relative time--based reservation functions is ON"}}
+                    {"edt":"0x41", "state":{"ja":"ON","en":"ON"}},
+                    {"edt":"0x42", "state":{"ja":"OFF", "en":"OFF"}}
                 ]
             }
         },
