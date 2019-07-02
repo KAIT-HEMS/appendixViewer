@@ -1,6 +1,6 @@
 const jsonData = {
     "metaData":{
-        "date":"2019-06-14",
+        "date":"2019-07-02",
         "release":"K",
         "version":"3.1.0"
     },
@@ -319,12 +319,7 @@ const jsonData = {
                     "validRelease":{"from":"C", "to":"latest"},
                     "propertyName":{"ja":"設置場所", "en":"Installation location"},
                     "accessRule":{"get":"required", "set":"required", "inf":"required"},
-                    "data":{
-                        "oneOf":[
-                            { "$ref":"#/definitions/raw_1" },
-                            { "$ref":"#/definitions/raw_17" }
-                        ]
-                    },
+                    "data":{ "$ref":"#/definitions/raw_1" },
                     "note":{
                         "ja":"1byte bitmap(例 0x00:未設定(初期値), 0x08:リビング)または0x01で始まる17 byte data",
                         "en":"1byte bimap(eg. 0x00:undefined(initial data), 0x08:living) or 17 bytes data starting from 0x01"
@@ -4359,7 +4354,7 @@ const jsonData = {
         "0xE1":{
             "validRelease":{"from":"A", "to":"latest"},
             "propertyName":{"ja":"水温設定1", "en":"waterTemperature1"},
-            "accessRule":{"get":"required", "set":"required", "inf":"optional"},
+            "accessRule":{"get":"required_c", "set":"required_c", "inf":"optional"},
             "data":{
                 "oneOf":[
                     { "$ref":"#/definitions/number_0-100Celsius" },
@@ -4377,7 +4372,7 @@ const jsonData = {
         "0xE2":{
             "validRelease":{"from":"A", "to":"latest"},
             "propertyName":{"ja":"水温設定2", "en":"waterTemperature2"},
-            "accessRule":{"get":"required", "set":"required", "inf":"optional"},
+            "accessRule":{"get":"required_c", "set":"required_c", "inf":"optional"},
             "data":{
                 "oneOf":[
                     {
@@ -4589,7 +4584,7 @@ const jsonData = {
         "0xE0":{
             "validRelease":{"from":"A", "to":"latest"},
             "propertyName":{"ja":"温度設定1", "en":"Temperature1"},
-            "accessRule":{"get":"required", "set":"required", "inf":"optional"},
+            "accessRule":{"get":"required_c", "set":"required_c", "inf":"optional"},
             "data":{
                 "oneOf":[
                     { "$ref":"#/definitions/number_0-50Celsius" },
@@ -4607,7 +4602,7 @@ const jsonData = {
         "0xE1":{
             "validRelease":{"from":"A", "to":"latest"},
             "propertyName":{"ja":"温度設定2", "en":"Temperature2"},
-            "accessRule":{"get":"required", "set":"required", "inf":"optional"},
+            "accessRule":{"get":"required_c", "set":"required_c", "inf":"optional"},
             "data":{
                 "oneOf":[
                     {
@@ -4644,25 +4639,42 @@ const jsonData = {
             }
         },
         "0xE3":{
-            "validRelease":{"from":"A", "to":"latest"},
-            "propertyName":{"ja":"床温度計測値", "en":"Measured floor temperature"},
-            "accessRule":{"get":"optional", "set":"optional", "inf":"optional"},
-            "data":{
-                "oneOf":[
-                    { "$ref":"#/definitions/number_-127-125Celsius" },
-                    {
-                        "type":"state",
-                        "size":1,
-                        "enum":[
-                            {"edt":"0x7E", "state":{"ja":"不明", "en":"Undefined"}, "readOnly":true}
+            "oneOf":[
+                {
+                    "validRelease":{"from":"A", "to":"B"},
+                    "propertyName":{"ja":"床温度計測値", "en":"Measured floor temperature"},
+                    "accessRule":{"get":"optional", "set":"optional", "inf":"optional"},
+                    "data":{
+                        "oneOf":[
+                            { "$ref":"#/definitions/number_0-50Celsius" },
+                            {
+                                "type":"state",
+                                "size":1,
+                                "enum":[
+                                    {"edt":"0x7E", "state":{"ja":"不明", "en":"Undefined"}, "readOnly":true}
+                                ]
+                            }
                         ]
                     }
-                ]
-            },
-            "note":{
-                "ja":"Release AからBまでは値域が0〜50",
-                "en":"The range of the value is from 0 to 50 between Release A and B."
-            }
+                },
+                {
+                    "validRelease":{"from":"C", "to":"latest"},
+                    "propertyName":{"ja":"床温度計測値", "en":"Measured floor temperature"},
+                    "accessRule":{"get":"optional", "set":"optional", "inf":"optional"},
+                    "data":{
+                        "oneOf":[
+                            { "$ref":"#/definitions/number_-127-125Celsius" },
+                            {
+                                "type":"state",
+                                "size":1,
+                                "enum":[
+                                    {"edt":"0x7E", "state":{"ja":"不明", "en":"Undefined"}, "readOnly":true}
+                                ]
+                            }
+                        ]
+                    }
+                }
+            ]
         },
         "0xE4":{
             "validRelease":{"from":"A", "to":"latest"},
@@ -6485,7 +6497,9 @@ const jsonData = {
                                     "maxItems":24,
                                     "items":{
                                         "type":"number",
-                                        "format":"uint8"
+                                        "format":"uint8",
+                                        "minimum":0,
+                                        "maximum":255
                                     }
                                 }
                             }
@@ -6883,7 +6897,7 @@ const jsonData = {
                         "name":"listOfData",
                         "element":{
                             "type":"array",
-                            "itemSize":2,
+                            "itemSize":4,
                             "maxItems":60,
                             "items":{
                                 "type":"object",
@@ -6908,7 +6922,7 @@ const jsonData = {
                                                 { "$ref":"#/definitions/number_-32767-32765", "unit":"A", "multipleOf":0.1 },
                                                 {
                                                     "type":"state",
-                                                    "size":1,
+                                                    "size":2,
                                                     "enum":[{"edt":"0x7FFE", "state":{"ja":"No data","en":"No data"}, "readOnly":true}]
                                                 }
                                             ]
@@ -7085,7 +7099,7 @@ const jsonData = {
                         "name":"listOfData",
                         "element":{
                             "type":"array",
-                            "itemSize":4,
+                            "itemSize":8,
                             "maxItems":30,
                             "items":{
                                 "type":"object",
@@ -7097,7 +7111,7 @@ const jsonData = {
                                                 { "$ref":"#/definitions/number_0-99999999", "unit":"kWh" },
                                                 {
                                                     "type":"state",
-                                                    "size":1,
+                                                    "size":4,
                                                     "enum":[{"edt":"0xFFFFFFFE", "state":{"ja":"No data","en":"No data"}, "readOnly":true}]
                                                 }
                                             ]
@@ -7110,7 +7124,7 @@ const jsonData = {
                                                 { "$ref":"#/definitions/number_0-99999999", "unit":"kWh" },
                                                 {
                                                     "type":"state",
-                                                    "size":1,
+                                                    "size":4,
                                                     "enum":[{"edt":"0xFFFFFFFE", "state":{"ja":"No data","en":"No data"}, "readOnly":true}]
                                                 }
                                             ]
@@ -7188,7 +7202,7 @@ const jsonData = {
                         "name":"listOfData",
                         "element":{
                             "type":"array",
-                            "itemSize":2,
+                            "itemSize":4,
                             "maxItems":60,
                             "items":{
                                 "type":"object",
@@ -7213,7 +7227,7 @@ const jsonData = {
                                                 { "$ref":"#/definitions/number_-32767-32765", "unit":"A", "multipleOf":0.1 },
                                                 {
                                                     "type":"state",
-                                                    "size":1,
+                                                    "size":2,
                                                     "enum":[{"edt":"0x7FFE", "state":{"ja":"No data","en":"No data"}, "readOnly":true}]
                                                 }
                                             ]
@@ -8834,7 +8848,8 @@ const jsonData = {
             "data":{
                 "type":"number",
                 "format":"uint8",
-                "minimum":1
+                "minimum":1,
+                "maximum":255
             }
         },
         "0xB3":{
@@ -8844,7 +8859,8 @@ const jsonData = {
             "data":{
                 "type":"number",
                 "format":"uint8",
-                "minimum":1
+                "minimum":1,
+                "maximum":255
             }
         },
         "0xB4":{
@@ -8931,7 +8947,8 @@ const jsonData = {
             "data":{
                 "type":"number",
                 "format":"uint8",
-                "minimum":1
+                "minimum":1,
+                "maximum":255
             }
         },
         "0xB9":{
@@ -8947,7 +8964,8 @@ const jsonData = {
             "data":{
                 "type":"number",
                 "format":"uint8",
-                "minimum":1
+                "minimum":1,
+                "maximum":255
             }
         },
         "0xBB":{
@@ -8973,7 +8991,8 @@ const jsonData = {
             "data":{
                 "type":"number",
                 "format":"uint8",
-                "minimum":1
+                "minimum":1,
+                "maximum":255
             }
         },
         "0xBD":{
@@ -8999,7 +9018,8 @@ const jsonData = {
             "data":{
                 "type":"number",
                 "format":"uint8",
-                "minimum":1
+                "minimum":1,
+                "maximum":255
             }
         },
         "0xBF":{
@@ -9291,7 +9311,9 @@ const jsonData = {
                             "maxItems":24,
                             "items":{
                                 "type":"number",
-                                "format":"uint8"
+                                "format":"uint8",
+                                "minimum":0,
+                                "maximum":255
                             }
                         }
                     }

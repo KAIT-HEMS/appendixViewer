@@ -1,5 +1,5 @@
 // elDdviewer.js
-// 2019.06.13
+// 2019.07.02
 
 let globalNotes = {};   // 備考欄のデータを保持するため
 var vm = new Vue({
@@ -161,18 +161,100 @@ function createAppendixList(key, property, id, indexObject, indexOneOf) {
     } else {
         appendix.name = property.propertyName.en;
     }
-    if (property.accessRule.get == "notApplicable") {
-        appendix.accessRule = "Set";
-    } else if  (property.accessRule.set == "notApplicable") {
-        appendix.accessRule = "Get";
-    } else {
-        appendix.accessRule = "Set/Get";
+    // access rule Set, Get
+    switch (property.accessRule.get) {
+        case 'notApplicable':
+            switch (property.accessRule.set) {
+                case 'notApplicable':
+                    appendix.accessRule = '-';
+                    appendix.accessRuleRequired = '';
+                    break;
+                case 'required':
+                    appendix.accessRule = 'Set';
+                    appendix.accessRuleRequired = '○';
+                    break;
+                case 'required_c':
+                    appendix.accessRule = 'Set';
+                    appendix.accessRuleRequired = '○*';
+                    break;
+                case 'optional':
+                    appendix.accessRule = 'Set';
+                    appendix.accessRuleRequired = '';
+                    break;
+                default:
+                    console.log('Error: accessRule is ', property.accessRule.set);
+            }
+            break;
+        case 'required':
+            switch (property.accessRule.set) {
+                case 'notApplicable':
+                    appendix.accessRule = 'Get';
+                    appendix.accessRuleRequired = '○';
+                    break;
+                case 'required':
+                    appendix.accessRule = 'Set/Get';
+                    appendix.accessRuleRequired = '○';
+                    break;
+                case 'required_c':
+                    appendix.accessRule = 'Set/Get';
+                    appendix.accessRuleRequired = '○*';
+                    break;
+                case 'optional':
+                    appendix.accessRule = 'Set/Get';
+                    appendix.accessRuleRequired = '○Get';
+                    break;
+                default:
+                    console.log('Error: accessRule is ', property.accessRule.set);
+            }
+            break;
+        case 'required_c':
+            switch (property.accessRule.set) {
+                case 'notApplicable':
+                    appendix.accessRule = 'Get';
+                    appendix.accessRuleRequired = '○*';
+                    break;
+                case 'required':
+                    appendix.accessRule = 'Set/Get';
+                    appendix.accessRuleRequired = '○*';
+                    break;
+                case 'required_c':
+                    appendix.accessRule = 'Set/Get';
+                    appendix.accessRuleRequired = '○*';
+                    break;
+                case 'optional':
+                    appendix.accessRule = 'Set/Get';
+                    appendix.accessRuleRequired = '○*Get';
+                    break;
+                default:
+                    console.log('Error: accessRule is ', property.accessRule.set);
+            }
+            break;
+        case 'optional':
+            switch (property.accessRule.set) {
+                case 'notApplicable':
+                    appendix.accessRule = 'Get';
+                    appendix.accessRuleRequired = '';
+                    break;
+                case 'required':
+                    appendix.accessRule = 'Set/Get';
+                    appendix.accessRuleRequired = '○Set';
+                    break;
+                case 'required_c':
+                    appendix.accessRule = 'Set/Get';
+                    appendix.accessRuleRequired = '○*Set';
+                    break;
+                case 'optional':
+                    appendix.accessRule = 'Set/Get';
+                    appendix.accessRuleRequired = '';
+                    break;
+                default:
+                    console.log('Error: accessRule is ', property.accessRule.set);
+            }
+            break;
+        default:
+            console.log('Error: accessRule is ', property.accessRule.get);
     }
-    if ((property.accessRule.get == "required") || (property.accessRule.set == "required")){
-        appendix.accessRuleRequired = "○";
-    } else if ((property.accessRule.get == "required_c") || (property.accessRule.set == "required_c")){
-        appendix.accessRuleRequired = "○*";
-    }
+    // access rule Anno
     if (property.accessRule.inf == "required") {
         appendix.inf = "○";
     }
@@ -195,8 +277,12 @@ function createAppendixList(key, property, id, indexObject, indexOneOf) {
             break;
         case 'number':
             appendix.propType = 'number';
-            // ３けた区切りのコンマを追加
-            appendix.range = (new Intl.NumberFormat().format(property.data.minimum)) + ' ~ ' + (new Intl.NumberFormat().format(property.data.maximum));
+            if (property.data.enum) {
+                appendix.range = property.data.enum;
+            } else {
+                // ３けた区切りのコンマを追加
+                appendix.range = (new Intl.NumberFormat().format(property.data.minimum)) + ' ~ ' + (new Intl.NumberFormat().format(property.data.maximum));
+            }
             appendix.dataType = property.data.format;
             appendix.unit = property.data.unit;
             switch (property.data.format) {
@@ -276,16 +362,18 @@ function createAppendixList(key, property, id, indexObject, indexOneOf) {
             break;
         case 'time':
             appendix.propType = 'time';
-            appendix.dataType = 'unsigned char x 2';
             appendix.dataSize = (property.data.size) ? property.data.size : 3;
             switch (appendix.dataSize) {
                 case 1:
+                    appendix.dataType = 'unsigned char x 1';
                     appendix.range = 'HH';
                     break;
                 case 2:
+                    appendix.dataType = 'unsigned char x 2';
                     appendix.range = 'HH:MM';
                     break;
                 case 3:
+                    appendix.dataType = 'unsigned char x 3';
                     appendix.range = 'HH:MM:SS';
                     break;
                 default:
@@ -294,7 +382,7 @@ function createAppendixList(key, property, id, indexObject, indexOneOf) {
             break;
         case 'raw':
             appendix.propType = 'raw';
-            appendix.range = 'raw';
+            appendix.range = '-';
             appendix.dataType = 'unsigned char';
             appendix.dataSize = (property.data.minSize == property.data.maxSize) ? (property.data.minSize) : (property.data.minSize + '-' + property.data.maxSize);
             break;
