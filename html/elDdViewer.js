@@ -1,5 +1,5 @@
 // elDdviewer.js
-// 2019.07.02
+// 2019.07.03
 
 let globalNotes = {};   // 備考欄のデータを保持するため
 var vm = new Vue({
@@ -30,6 +30,10 @@ var vm = new Vue({
         updateLanguage: function () {
             console.log("updateLanguage, rbLanguage:", this.rbLanguage);
             refresh();
+        },
+        informations: function () {
+            const message = "JSON data: " + jsonData.metaData.date + ", Relase:" + jsonData.metaData.release + ", Version:" + jsonData.metaData.version;
+            window.alert(message);
         },
         showNote: function (noteEpc) {
         	window.localStorage.setItem('note-title', 'Note for EPC = ' + noteEpc);

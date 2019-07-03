@@ -1,16 +1,16 @@
 # elDdViewer: EL Device Description Viewer
 
-2019.05.xx 1st release    
+2019.07.03 V0.1    
 
 ## Abstract
-elDdViewerはelDeviceDescription.json V3.00対応のViewerである。  
+elDdViewerは「ECHONET Lite機器オブジェクト詳細規定」と同等の内容をブラウザーで表示するアプリケーションである
 
 ## Requirements
-Node.jsがインストールされたWindows PC, Macまたは Raspberry Pi  
+Web Browser  
 
 ## Installation
-ファイルをコピーする。
+ファイルをダウンロードする
 
 ## Launch
-index.htmlをBrowserで開く。
+htmlフォルダ内のindex.htmlをChromeなどのWeb Browserで開く
 

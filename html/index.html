@@ -1,5 +1,5 @@
 <!-- index.html for elDdViewer-->
-<!-- 2019.06.14 -->
+<!-- 2019.07.03 -->
 
 <!doctype html>
 <html lang="ja">
@@ -7,8 +7,8 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link rel="stylesheet" href="lib/bootstrap/css/bootstrap.min.css">
-<!--<link rel="stylesheet" href="lib/fontawesome-free/css/all.css">-->
-<title>ECHONET Lite Appendix Viewer</title>
+<link rel="stylesheet" href="lib/fontawesome-free/css/all.css">
+<title>ECHONET Lite Appendix</title>
 <style>
 body {
   padding-top: 1rem;
@@ -116,7 +116,10 @@ table td, th{
                             <label for="english" class="form-check-label ">English</label>
                         </div>
                     </div>
-                </div>              
+                </div> 
+
+				<!-- infoボタン -->
+				<div class="btn" title="JSON version" v-on:click="informations"><i class="fas fa-info-circle"></i></div>
 
             </div>
         </div>
