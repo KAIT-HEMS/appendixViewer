@@ -1,8 +1,8 @@
 const jsonData = {
     "metaData":{
-        "date":"2019-07-02",
-        "release":"K",
-        "version":"3.1.0"
+        "date":"2019-07-11",
+        "release":"L",
+        "version":"3.1.2"
     },
     "definitions":{
         "number_1-60":{
@@ -155,6 +155,11 @@ const jsonData = {
             "type":"level",
             "base":"0x31",
             "maximum":8
+        },
+        "level_3000-17":{
+            "type":"level",
+            "base":"0x3000",
+            "maximum":17
         },
         "raw_1":{
             "type":"raw",
@@ -319,7 +324,12 @@ const jsonData = {
                     "validRelease":{"from":"C", "to":"latest"},
                     "propertyName":{"ja":"設置場所", "en":"Installation location"},
                     "accessRule":{"get":"required", "set":"required", "inf":"required"},
-                    "data":{ "$ref":"#/definitions/raw_1" },
+                    "data":{
+                        "oneOf":[
+                            { "$ref":"#/definitions/raw_1" },
+                            { "$ref":"#/definitions/raw_17" }
+                        ]
+                    },
                     "note":{
                         "ja":"1byte bitmap(例 0x00:未設定(初期値), 0x08:リビング)または0x01で始まる17 byte data",
                         "en":"1byte bimap(eg. 0x00:undefined(initial data), 0x08:living) or 17 bytes data starting from 0x01"
@@ -906,16 +916,41 @@ const jsonData = {
             "data":{ "$ref":"#/definitions/number_-32767-32766", "unit":"kW", "multipleOf":0.1 }
         },
         "0xE4":{
-            "validRelease":{"from":"A", "to":"latest"},
-            "propertyName":{"ja":"積算電力量計測履歴情報", "en":"Integral electric energy measurement log"},
-            "accessRule":{"get":"optional", "set":"notApplicable", "inf":"optional"},
-            "data":{
-                "type":"array",
-                "itemSize":4,
-                "minItems":48,
-                "maxItems":48,
-                "items":{ "$ref":"#/definitions/number_0-999999999", "unit":"kWh", "multipleOf":0.001 }
-            }
+            "oneOf":[
+                {
+                    "validRelease":{"from":"A", "to":"K"},
+                    "propertyName":{"ja":"積算電力量計測履歴情報", "en":"Integral electric energy measurement log"},
+                    "accessRule":{"get":"optional", "set":"notApplicable", "inf":"optional"},
+                    "data":{
+                        "type":"array",
+                        "itemSize":4,
+                        "minItems":48,
+                        "maxItems":48,
+                        "items":{ "$ref":"#/definitions/number_0-999999999", "unit":"kWh", "multipleOf":0.001 }
+                    }
+                },
+                {
+                    "validRelease":{"from":"L", "to":"latest"},
+                    "propertyName":{"ja":"積算電力量計測履歴情報", "en":"Integral electric energy measurement log"},
+                    "accessRule":{"get":"optional", "set":"notApplicable", "inf":"optional"},
+                    "data":{
+                        "type":"array",
+                        "itemSize":4,
+                        "minItems":48,
+                        "maxItems":48,
+                        "items":{
+                            "oneOf":[
+                                { "$ref":"#/definitions/number_0-999999999", "unit":"kWh", "multipleOf":0.001 },
+                                {
+                                    "type":"state",
+                                    "size":4,
+                                    "enum":[{"edt":"0xFFFFFFFE", "state":{"ja":"No data","en":"No data"}}]
+                                }                                
+                            ]
+                        }
+                    }
+                }
+            ]
         },
         "0xE5":{
             "validRelease":{"from":"A", "to":"latest"},
@@ -3948,21 +3983,44 @@ const jsonData = {
             }
         },
         "0xB0":{
-            "validRelease":{"from":"A", "to":"latest"},
-            "propertyName":{"ja":"運転設定", "en":"Operation setting"},
-            "accessRule":{"get":"required", "set":"required", "inf":"optional"},
-            "data":{
-                "type":"state",
-                "size":1,
-                "enum":[
-                    {"edt":"0x10", "state":{"ja":"換気運転", "en":"Ventilation"}},
-                    {"edt":"0x20", "state":{"ja":"入浴前予備暖房運転", "en":"Preheating"}},
-                    {"edt":"0x30", "state":{"ja":"入浴中暖房運転", "en":"Heating"}},
-                    {"edt":"0x40", "state":{"ja":"乾燥運転", "en":"Drying"}},
-                    {"edt":"0x50", "state":{"ja":"涼風運転", "en":"Cooling"}},
-                    {"edt":"0x00", "state":{"ja":"停止", "en":"stop"}}
-                ]
-            }
+            "oneOf":[
+                {
+                    "validRelease":{"from":"A", "to":"K"},
+                    "propertyName":{"ja":"運転設定", "en":"Operation setting"},
+                    "accessRule":{"get":"required", "set":"required", "inf":"optional"},
+                    "data":{
+                        "type":"state",
+                        "size":1,
+                        "enum":[
+                            {"edt":"0x10", "state":{"ja":"換気運転", "en":"Ventilation"}},
+                            {"edt":"0x20", "state":{"ja":"入浴前予備暖房運転", "en":"Preheating"}},
+                            {"edt":"0x30", "state":{"ja":"入浴中暖房運転", "en":"Heating"}},
+                            {"edt":"0x40", "state":{"ja":"乾燥運転", "en":"Drying"}},
+                            {"edt":"0x50", "state":{"ja":"涼風運転", "en":"Cooling"}},
+                            {"edt":"0x00", "state":{"ja":"停止", "en":"stop"}}
+                        ]
+                    }
+                },
+                {
+                    "validRelease":{"from":"L", "to":"latest"},
+                    "propertyName":{"ja":"運転設定", "en":"Operation setting"},
+                    "accessRule":{"get":"required", "set":"required", "inf":"optional"},
+                    "data":{
+                        "type":"state",
+                        "size":1,
+                        "enum":[
+                            {"edt":"0x10", "state":{"ja":"換気運転", "en":"Ventilation"}},
+                            {"edt":"0x20", "state":{"ja":"入浴前予備暖房運転", "en":"Preheating"}},
+                            {"edt":"0x30", "state":{"ja":"入浴中暖房運転", "en":"Heating"}},
+                            {"edt":"0x40", "state":{"ja":"乾燥運転", "en":"Drying"}},
+                            {"edt":"0x50", "state":{"ja":"涼風運転", "en":"Cooling"}},
+                            {"edt":"0x60", "state":{"ja":"ミストサウナ運転", "en":"Mist sauna"}},
+                            {"edt":"0x61", "state":{"ja":"水ミスト運転", "en":"Water mist"}},
+                            {"edt":"0x00", "state":{"ja":"停止", "en":"stop"}}
+                        ]
+                    }
+                }
+            ]
         },
         "0xB1":{
             "validRelease":{"from":"A", "to":"latest"},
@@ -4076,6 +4134,42 @@ const jsonData = {
                 ]
             }
         },
+        "0xB6":{
+            "validRelease":{"from":"L", "to":"latest"},
+            "propertyName":{"ja":"ミストサウナ運転設定", "en":"Mist sauna operation setting"},
+            "accessRule":{"get":"optional", "set":"optional", "inf":"optional"},
+            "data":{
+                "oneOf":[
+                    { "$ref":"#/definitions/level_31-8" },
+                    {
+                        "type":"state",
+                        "size":1,
+                        "enum":[
+                            {"edt":"0x41", "state":{"ja":"自動", "en":"Auto"}},
+                            {"edt":"0x42", "state":{"ja":"標準", "en":"Standard"}}
+                        ]
+                    }            
+                ]
+            }
+        },
+        "0xB7":{
+            "validRelease":{"from":"L", "to":"latest"},
+            "propertyName":{"ja":"水ミスト運転設定", "en":"Water mist operation setting"},
+            "accessRule":{"get":"optional", "set":"optional", "inf":"optional"},
+            "data":{
+                "oneOf":[
+                    { "$ref":"#/definitions/level_31-8" },
+                    {
+                        "type":"state",
+                        "size":1,
+                        "enum":[
+                            {"edt":"0x41", "state":{"ja":"自動", "en":"Auto"}},
+                            {"edt":"0x42", "state":{"ja":"標準", "en":"Standard"}}
+                        ]
+                    }            
+                ]
+            }
+        },
         "0xBA":{
             "validRelease":{"from":"A", "to":"latest"},
             "propertyName":{"ja":"室内相対湿度計測値", "en":"Measured relative bathroom humidity"},
@@ -4132,21 +4226,44 @@ const jsonData = {
             }
         },
         "0xE1":{
-            "validRelease":{"from":"A", "to":"latest"},
-            "propertyName":{"ja":"ONタイマ予約設定2", "en":"ON timer-based reservation setting 2"},
-            "accessRule":{"get":"optional", "set":"optional", "inf":"optional"},
-            "data":{
-                "type":"state",
-                "size":1,
-                "enum":[
-                    {"edt":"0x10", "state":{"ja":"換気運転", "en":"Ventilation"}},
-                    {"edt":"0x20", "state":{"ja":"入浴前予備暖房運転", "en":"Preheating"}},
-                    {"edt":"0x30", "state":{"ja":"入浴中暖房運転", "en":"Heating"}},
-                    {"edt":"0x40", "state":{"ja":"乾燥運転", "en":"Drying"}},
-                    {"edt":"0x50", "state":{"ja":"涼風運転", "en":"Cooling"}},
-                    {"edt":"0x00", "state":{"ja":"予約切", "en":"OFF"}}
-                ]
-            }
+            "oneOf":[
+                {
+                    "validRelease":{"from":"A", "to":"K"},
+                    "propertyName":{"ja":"ONタイマ予約設定2", "en":"ON timer-based reservation setting 2"},
+                    "accessRule":{"get":"optional", "set":"optional", "inf":"optional"},
+                    "data":{
+                        "type":"state",
+                        "size":1,
+                        "enum":[
+                            {"edt":"0x10", "state":{"ja":"換気運転", "en":"Ventilation"}},
+                            {"edt":"0x20", "state":{"ja":"入浴前予備暖房運転", "en":"Preheating"}},
+                            {"edt":"0x30", "state":{"ja":"入浴中暖房運転", "en":"Heating"}},
+                            {"edt":"0x40", "state":{"ja":"乾燥運転", "en":"Drying"}},
+                            {"edt":"0x50", "state":{"ja":"涼風運転", "en":"Cooling"}},
+                            {"edt":"0x00", "state":{"ja":"予約切", "en":"OFF"}}
+                        ]
+                    }
+                },
+                {
+                    "validRelease":{"from":"K", "to":"latest"},
+                    "propertyName":{"ja":"ONタイマ予約設定2", "en":"ON timer-based reservation setting 2"},
+                    "accessRule":{"get":"optional", "set":"optional", "inf":"optional"},
+                    "data":{
+                        "type":"state",
+                        "size":1,
+                        "enum":[
+                            {"edt":"0x10", "state":{"ja":"換気運転", "en":"Ventilation"}},
+                            {"edt":"0x20", "state":{"ja":"入浴前予備暖房運転", "en":"Preheating"}},
+                            {"edt":"0x30", "state":{"ja":"入浴中暖房運転", "en":"Heating"}},
+                            {"edt":"0x40", "state":{"ja":"乾燥運転", "en":"Drying"}},
+                            {"edt":"0x50", "state":{"ja":"涼風運転", "en":"Cooling"}},
+                            {"edt":"0x60", "state":{"ja":"ミストサウナ運転", "en":"Mist sauna"}},
+                            {"edt":"0x61", "state":{"ja":"水ミスト運転", "en":"Water mist"}},
+                            {"edt":"0x00", "state":{"ja":"予約切", "en":"OFF"}}
+                        ]
+                    }
+                }
+            ]
         }
     }
 },
@@ -4154,6 +4271,215 @@ const jsonData = {
     "validRelease":{"from":"A", "to":"latest"},
     "className":{"ja":"住宅用太陽光発電", "en":"PV Power Generation"},
     "elProperties":{
+        "0x83":{
+            "validRelease":{"from":"K", "to":"latest"},
+            "propertyName":{"ja":"識別番号", "en":"Identification number"},
+            "accessRule":{"get":"required", "set":"notApplicable", "inf":"optional"},
+            "data":{ "$ref":"#/definitions/raw_1-17" },
+            "note":{
+                "ja":"1バイト目は0xFE。2〜4バイト目はメーカコード。残りは機器毎のユニーク値",
+                "en":"1st data is 0xFE. 2nd to 4th data is manufacture code. The rest should be unique to each device."
+            }
+        },
+        "0x97":{
+            "validRelease":{"from":"K", "to":"latest"},
+            "propertyName":{"ja":"現在時刻設定", "en":"Current time setting"},
+            "accessRule":{"get":"required_c", "set":"optional", "inf":"optional"},
+            "data":{
+                "type":"time",
+                "size":2
+            },
+            "note":{"ja":"出力制御スケジュールにより出力制御を行う場合は必須", "en":"required if output control by schedule is capable"}
+        },
+        "0x98":{
+            "validRelease":{"from":"K", "to":"latest"},
+            "propertyName":{"ja":"現在年月日設定", "en":"Current date setting"},
+            "accessRule":{"get":"required_c", "set":"optional", "inf":"optional"},
+            "data":{
+                "type":"date-time",
+                "size":4
+            },
+            "note":{"ja":"出力制御スケジュールにより出力制御を行う場合は必須", "en":"required if output control by schedule is capable"}
+        },
+
+        "0xA0":{
+            "validRelease":{"from":"K", "to":"latest"},
+            "propertyName":{"ja":"出力制御設定１", "en":"Output power control setting 1"},
+            "accessRule":{"get":"required_c", "set":"required_c", "inf":"optional"},
+            "data":{ "$ref":"#/definitions/number_0-100%" },
+            "note":{"ja":"出力制御が可能な場合は、0xA0または0xA1のいずれかが必須", "en":"either 0xA0 or 0xA1 is required if output control is capable"}
+        },
+        "0xA1":{
+            "validRelease":{"from":"K", "to":"latest"},
+            "propertyName":{"ja":"出力制御設定２", "en":"utput power control setting 2"},
+            "accessRule":{"get":"required_c", "set":"required_c", "inf":"optional"},
+            "data":{ "$ref":"#/definitions/number_0-65533", "unit":"W" },
+            "note":{"ja":"出力制御が可能な場合は、0xA0または0xA1のいずれかが必須", "en":"either 0xA0 or 0xA1 is required if output control is capable"}
+        },
+        "0xA2":{
+            "validRelease":{"from":"K", "to":"latest"},
+            "propertyName":{"ja":"余剰買取制御機能設定", "en":"Function to control purchase surplus electricity setting"},
+            "accessRule":{"get":"required_c", "set":"optional", "inf":"optional"},
+            "data":{
+                "type":"state",
+                "size":1,
+                "enum":[
+                    {"edt":"0x41", "state":{"ja":"有効", "en":"Valid"}},
+                    {"edt":"0x42", "state":{"ja":"無効", "en":"Invalid"}}
+                ]
+            },
+            "note":{"ja":"出力制御が可能な場合は必須", "en":"required if output control is capable"}
+        },
+        "0xB0":{
+            "validRelease":{"from":"K", "to":"latest"},
+            "propertyName":{"ja":"出力制御スケジュール", "en":"Output power control schedule"},
+            "accessRule":{"get":"required_c", "set":"notApplicable", "inf":"optional"},
+            "data":{
+                "type":"object",
+                "properties":[
+                    {
+                        "name":"date",
+                        "element":{
+                            "oneOf":[
+                                { "type":"date-time", "size":"4" },
+                                {
+                                    "type":"state",
+                                    "size":4,
+                                    "enum":[{"edt":"0xFFFFFFFF", "state":{"ja":"不明","en":"Unknown"}, "readOnly":true}]
+                                }
+                            ]
+                        }
+                    },
+                    {
+                        "name":"rate",
+                        "element":{
+                            "type":"array",
+                            "itemSize":1,
+                            "minItems":96,
+                            "maxItems":96,
+                            "items":{
+                                "oneOf":[
+                                    { "$ref":"#/definitions/number_0-100%" },
+                                    {
+                                        "type":"state",
+                                        "size":1,
+                                        "enum":[{"edt":"0xFF", "state":{"ja":"不明","en":"Unknown"}, "readOnly":true}]
+                                    }
+                                ]
+                            }
+                        }
+                    }
+                ]
+            },
+            "note":{"ja":"出力制御スケジュールにより出力制御を行う場合は必須", "en":"required if output control by schedule is capable"}
+        },
+        "0xB1":{
+            "validRelease":{"from":"K", "to":"latest"},
+            "propertyName":{"ja":"次回アクセス日時", "en":"Next access date and time"},
+            "accessRule":{"get":"required_c", "set":"notApplicable", "inf":"optional"},
+            "data":{
+                "oneOf":[
+                    { "type":"date-time", "size":"7" },
+                    {
+                        "type":"state",
+                        "size":7,
+                        "enum":[{"edt":"0xFFFFFFFFFFFFFF", "state":{"ja":"不明","en":"Unknown"}, "readOnly":true}]
+                    }
+                ]
+            },
+            "note":{"ja":"出力制御スケジュールにより出力制御を行う場合は必須", "en":"required if output control by schedule is capable"}
+        },
+        "0xB2":{
+            "validRelease":{"from":"K", "to":"latest"},
+            "propertyName":{"ja":"余剰買取制御機能タイプ", "en":"Function to control the type of surplus electricity purchase"},
+            "accessRule":{"get":"required_c", "set":"notApplicable", "inf":"optional"},
+            "data":{
+                "type":"state",
+                "size":1,
+                "enum":[
+                    {"edt":"0x41", "state":{"ja":"有効", "en":"Valid"}},
+                    {"edt":"0x42", "state":{"ja":"無効", "en":"Invalid"}}
+                ]
+            },
+            "note":{"ja":"出力制御スケジュールにより出力制御を行う場合は必須", "en":"required if output control by schedule is capable"}
+        },
+        "0xB3":{
+            "validRelease":{"from":"K", "to":"latest"},
+            "propertyName":{"ja":"出力変化時間設定値", "en":"Output power change time setting value"},
+            "accessRule":{"get":"required", "set":"notApplicable", "inf":"optional"},
+            "data":{ "$ref":"#/definitions/number_0-65533", "unit":"second" }
+        },
+        "0xB4":{
+            "validRelease":{"from":"K", "to":"latest"},
+            "propertyName":{"ja":"上限クリップ設定値", "en":"Upper limit clip setting value"},
+            "accessRule":{"get":"required_c", "set":"notApplicable", "inf":"optional"},
+            "data":{ "$ref":"#/definitions/number_0-65533", "unit":"W" },
+            "note":{"ja":"出力制御スケジュールにより出力制御を行う場合は必須", "en":"required if output control by schedule is capable"}
+        },
+        "0xC0":{
+            "validRelease":{"from":"K", "to":"latest"},
+            "propertyName":{"ja":"運転力率設定値", "en":"Operation power factor setting value"},
+            "accessRule":{"get":"optional", "set":"notApplicable", "inf":"optional"},
+            "data":{ "$ref":"#/definitions/number_0-100%" }
+        },
+        "0xC1":{
+            "validRelease":{"from":"K", "to":"latest"},
+            "propertyName":{"ja":"FIT契約タイプ", "en":"FIT contract type"},
+            "accessRule":{"get":"required", "set":"required", "inf":"optional"},
+            "data":{
+                "type":"state",
+                "size":1,
+                "enum":[
+                    {"edt":"0x41", "state":{"ja":"FIT", "en":"FIT"}},
+                    {"edt":"0x42", "state":{"ja":"非FIT", "en":"Non-FIT"}},
+                    {"edt":"0x43", "state":{"ja":"未設定", "en":"No setting"}}
+                ]
+            }
+        },
+        "0xC2":{
+            "validRelease":{"from":"K", "to":"latest"},
+            "propertyName":{"ja":"自家消費タイプ", "en":"Self-consumption type"},
+            "accessRule":{"get":"required", "set":"notApplicable", "inf":"optional"},
+            "data":{
+                "type":"state",
+                "size":1,
+                "enum":[
+                    {"edt":"0x41", "state":{"ja":"自家消費有", "en":"With self-consumption"}},
+                    {"edt":"0x42", "state":{"ja":"自家消費無", "en":"Without self-consumption"}},
+                    {"edt":"0x43", "state":{"ja":"不明", "en":"Unknown"}}
+                ]
+            }
+        },
+        "0xC3":{
+            "validRelease":{"from":"K", "to":"latest"},
+            "propertyName":{"ja":"設備認定容量", "en":"Capacity approved by equipment"},
+            "accessRule":{"get":"required_c", "set":"notApplicable", "inf":"optional"},
+            "data":{ "$ref":"#/definitions/number_0-65533", "unit":"W" },
+            "note":{"ja":"0xC3または0xC4のいずれかが必須", "en":"either 0xC3 or 0xC4 is required"}
+        },
+        "0xC4":{
+            "validRelease":{"from":"K", "to":"latest"},
+            "propertyName":{"ja":"換算係数", "en":"Conversion coefficient"},
+            "accessRule":{"get":"required_c", "set":"notApplicable", "inf":"optional"},
+            "data":{ "$ref":"#/definitions/number_0-100%" },
+            "note":{"ja":"0xC3または0xC4のいずれかが必須", "en":"either 0xC3 or 0xC4 is required"}
+        },
+        "0xD1":{
+            "validRelease":{"from":"K", "to":"latest"},
+            "propertyName":{"ja":"出力抑制状態", "en":"Output power restraint status"},
+            "accessRule":{"get":"required", "set":"notApplicable", "inf":"optional"},
+            "data":{
+                "type":"state",
+                "size":1,
+                "enum":[
+                    {"edt":"0x41", "state":{"ja":"抑制中（出力制御）", "en":"Ongoing restraint (output power control)"}},
+                    {"edt":"0x42", "state":{"ja":"抑制中（出力制御以外）", "en":"Ongoing restraint (except output power control)"}},
+                    {"edt":"0x43", "state":{"ja":"抑制中（抑制要因不明）", "en":"Ongoing restraint (reason for restraint is unknown)"}},
+                    {"edt":"0x44", "state":{"ja":"抑制未実施", "en":"Not restraining"}},
+                    {"edt":"0x45", "state":{"ja":"不明", "en":"Unknown"}}
+                ]
+            }
+        },
         "0xD0":{
             "oneOf":[
                 {
@@ -9734,6 +10060,154 @@ const jsonData = {
         }
     }
 },
+"0x02A6":{
+    "validRelease":{"from":"L", "to":"latest"},
+    "className":{"ja":"ハイブリッド給湯器", "en":"Hybrid Water Heater"},
+    "elProperties":{
+        "0xB0":{
+            "propertyName":{"ja":"沸き上げ自動設定", "en":"Automatic water heating setting"},
+            "validRelease":{"from":"L", "to":"latest"},
+            "accessRule":{"get":"optional", "set":"optional", "inf":"required"},
+            "data":{
+                "type":"state",
+                "size":1,
+                "enum":[
+                    {"edt":"0x41", "state":{"ja":"自動沸き上げ", "en":"Auto Heating"}},
+                    {"edt":"0x43", "state":{"ja":"手動沸き上げ停止", "en":"Manual No Heating"}},
+                    {"edt":"0x42", "state":{"ja":"手動沸き上げ", "en":"Manual Heating"}}
+                ]
+            }
+        },
+        "0xB2":{
+            "propertyName":{"ja":"給湯沸き上げ中状態", "en":"XXX"},
+            "validRelease":{"from":"L", "to":"latest"},
+            "accessRule":{"get":"optional", "set":"notApplicable", "inf":"required"},
+            "data":{
+                "type":"state",
+                "size":1,
+                "enum":[
+                    {"edt":"0x41", "state":{"ja":"沸き上げ中", "en":"Heating"}},
+                    {"edt":"0x42", "state":{"ja":"非沸き上げ中", "en":"Not Heating"}}
+                ]
+            }
+        },
+        "0xB3":{
+            "propertyName":{"ja":"暖房沸き上げ中状態", "en":"XXX"},
+            "validRelease":{"from":"L", "to":"latest"},
+            "accessRule":{"get":"optional", "set":"notApplicable", "inf":"optional"},
+            "data":{
+                "type":"state",
+                "size":1,
+                "enum":[
+                    {"edt":"0x41", "state":{"ja":"沸き上げ中", "en":"Heating"}},
+                    {"edt":"0x42", "state":{"ja":"非沸き上げ中", "en":"Not Heating"}}
+                ]
+            }
+        },
+        "0xB6":{
+            "propertyName":{"ja":"補助熱源機給湯モード設定", "en":"XXX"},
+            "validRelease":{"from":"L", "to":"latest"},
+            "accessRule":{"get":"optional", "set":"optional", "inf":"optional"},
+            "data":{
+                "type":"state",
+                "size":1,
+                "enum":[
+                    {"edt":"0x41", "state":{"ja":"設定する", "en":"XXX"}},
+                    {"edt":"0x42", "state":{"ja":"設定しない", "en":"XXX"}}
+                ]
+            }
+        },
+        "0xB7":{
+            "propertyName":{"ja":"補助熱源機暖房モード設定", "en":"XXX"},
+            "validRelease":{"from":"L", "to":"latest"},
+            "accessRule":{"get":"optional", "set":"optional", "inf":"optional"},
+            "data":{
+                "type":"state",
+                "size":1,
+                "enum":[
+                    {"edt":"0x41", "state":{"ja":"設定する", "en":"XXX"}},
+                    {"edt":"0x42", "state":{"ja":"設定しない", "en":"XXX"}}
+                ]
+            }
+        },
+        "0xB8":{
+            "propertyName":{"ja":"太陽光発電連携モード設定", "en":"XXX"},
+            "validRelease":{"from":"L", "to":"latest"},
+            "accessRule":{"get":"required", "set":"required", "inf":"required"},
+            "data":{
+                "type":"state",
+                "size":1,
+                "enum":[
+                    {"edt":"0x41", "state":{"ja":"モード切", "en":"XXX"}},
+                    {"edt":"0x42", "state":{"ja":"自家消費", "en":"XXX"}},
+                    {"edt":"0x43", "state":{"ja":"売電優先", "en":"XXX"}},
+                    {"edt":"0x44", "state":{"ja":"経済性考慮", "en":"XXX"}}
+                ]
+            }
+        },
+        "0xB9":{
+            "propertyName":{"ja":"太陽光発電利用時間", "en":"XXX"},
+            "validRelease":{"from":"L", "to":"latest"},
+            "accessRule":{"get":"optional", "set":"optional", "inf":"optional"},
+            "data":{
+                "type":"object",
+                "properties":[
+                    {
+                        "name":"Start time",
+                        "element":{
+                            "type":"time",
+                            "size":2
+                        }
+                    },
+                    {
+                        "name":"End time",
+                        "element":{
+                            "type":"time",
+                            "size":2
+                        }
+                    }
+                ]
+            }
+        },
+        "0xC3":{
+            "propertyName":{"ja":"給湯中状態", "en":"Hot water supply status"},
+            "validRelease":{"from":"L", "to":"latest"},
+            "accessRule":{"get":"optional", "set":"notApplicable", "inf":"required"},
+            "data":{
+                "type":"state",
+                "size":1,
+                "enum":[
+                    {"edt":"0x41", "state":{"ja":"給湯中", "en":"Supplying"}},
+                    {"edt":"0x42", "state":{"ja":"非給湯中", "en":"Not Supplying"}}
+                ]
+            }
+        },
+        "0xE1":{
+            "propertyName":{"ja":"残湯量計測値", "en":"Measured amount of water remaining in tank"},
+            "validRelease":{"from":"L", "to":"latest"},
+            "accessRule":{"get":"optional", "set":"notApplicable", "inf":"optional"},
+            "data":{
+                "type":"number",
+                "format":"uint16",
+                "unit":"L",
+                "minimum":0,
+                "maximum":65533
+            }
+        },
+        "0xE2":{
+            "propertyName":{"ja":"タンク容量値", "en":"Tank capacity"},
+            "validRelease":{"from":"L", "to":"latest"},
+            "accessRule":{"get":"optional", "set":"notApplicable", "inf":"optional"},
+            "data":{
+                "type":"number",
+                "format":"uint16",
+                "unit":"L",
+                "minimum":0,
+                "maximum":65533
+            }
+        }
+    }
+},
 "0x03B8":{
     "validRelease":{"from":"A", "to":"latest"},
     "className":{"ja":"オーブンレンジ", "en":"Combination Microwave Oven"},
@@ -10286,6 +10760,7 @@ const jsonData = {
                         "element":{
                             "oneOf":[
                                 { "$ref":"#/definitions/number_0-10000", "unit":"W" },
+                                { "$ref":"#/definitions/level_3000-17" },
                                 {
                                     "type":"state",
                                     "size":2,
@@ -10293,8 +10768,9 @@ const jsonData = {
                                         {"edt":"0x4002", "state":{"ja":"とろ火", "en":"Very low flame"}},
                                         {"edt":"0x4004", "state":{"ja":"弱火", "en":"Low flame"}},
                                         {"edt":"0x4006", "state":{"ja":"中火", "en":"Medium flame"}},
-                                        {"edt":"0x4007", "state":{"ja":"強火", "en":"High flame"}},
-                                        {"edt":"0x400A", "state":{"ja":"ハイパワー", "en":"High power"}}
+                                        {"edt":"0x4008", "state":{"ja":"強火", "en":"High flame"}},
+                                        {"edt":"0x400A", "state":{"ja":"ハイパワー", "en":"High power"}},
+                                        {"edt":"0xFFFF", "state":{"ja":"未設定","en":"Undefined"}, "readOnly":true}
                                     ]
                                 }
                             ]
@@ -10305,6 +10781,7 @@ const jsonData = {
                         "element":{
                             "oneOf":[
                                 { "$ref":"#/definitions/number_0-10000", "unit":"W" },
+                                { "$ref":"#/definitions/level_3000-17" },
                                 {
                                     "type":"state",
                                     "size":2,
@@ -10312,8 +10789,9 @@ const jsonData = {
                                         {"edt":"0x4002", "state":{"ja":"とろ火", "en":"Very low flame"}},
                                         {"edt":"0x4004", "state":{"ja":"弱火", "en":"Low flame"}},
                                         {"edt":"0x4006", "state":{"ja":"中火", "en":"Medium flame"}},
-                                        {"edt":"0x4007", "state":{"ja":"強火", "en":"High flame"}},
-                                        {"edt":"0x400A", "state":{"ja":"ハイパワー", "en":"High power"}}
+                                        {"edt":"0x4008", "state":{"ja":"強火", "en":"High flame"}},
+                                        {"edt":"0x400A", "state":{"ja":"ハイパワー", "en":"High power"}},
+                                        {"edt":"0xFFFF", "state":{"ja":"未設定","en":"Undefined"}, "readOnly":true}
                                     ]
                                 }
                             ]
@@ -10324,6 +10802,7 @@ const jsonData = {
                         "element":{
                             "oneOf":[
                                 { "$ref":"#/definitions/number_0-10000", "unit":"W" },
+                                { "$ref":"#/definitions/level_3000-17" },
                                 {
                                     "type":"state",
                                     "size":2,
@@ -10331,8 +10810,9 @@ const jsonData = {
                                         {"edt":"0x4002", "state":{"ja":"とろ火", "en":"Very low flame"}},
                                         {"edt":"0x4004", "state":{"ja":"弱火", "en":"Low flame"}},
                                         {"edt":"0x4006", "state":{"ja":"中火", "en":"Medium flame"}},
-                                        {"edt":"0x4007", "state":{"ja":"強火", "en":"High flame"}},
-                                        {"edt":"0x400A", "state":{"ja":"ハイパワー", "en":"High power"}}
+                                        {"edt":"0x4008", "state":{"ja":"強火", "en":"High flame"}},
+                                        {"edt":"0x400A", "state":{"ja":"ハイパワー", "en":"High power"}},
+                                        {"edt":"0xFFFF", "state":{"ja":"未設定","en":"Undefined"}, "readOnly":true}
                                     ]
                                 }
                             ]
@@ -10343,6 +10823,7 @@ const jsonData = {
                         "element":{
                             "oneOf":[
                                 { "$ref":"#/definitions/number_0-10000", "unit":"W" },
+                                { "$ref":"#/definitions/level_3000-17" },
                                 {
                                     "type":"state",
                                     "size":2,
@@ -10350,16 +10831,16 @@ const jsonData = {
                                         {"edt":"0x4002", "state":{"ja":"とろ火", "en":"Very low flame"}},
                                         {"edt":"0x4004", "state":{"ja":"弱火", "en":"Low flame"}},
                                         {"edt":"0x4006", "state":{"ja":"中火", "en":"Medium flame"}},
-                                        {"edt":"0x4007", "state":{"ja":"強火", "en":"High flame"}},
-                                        {"edt":"0x400A", "state":{"ja":"ハイパワー", "en":"High power"}}
+                                        {"edt":"0x4008", "state":{"ja":"強火", "en":"High flame"}},
+                                        {"edt":"0x400A", "state":{"ja":"ハイパワー", "en":"High power"}},
+                                        {"edt":"0xFFFF", "state":{"ja":"未設定","en":"Undefined"}, "readOnly":true}
                                     ]
                                 }
                             ]
                         }
                     }
                 ]
-            },
-            "note":{"ja":"0x3000-0x3010はレベル値", "en":"0x3000-0x3010 is level value"}
+            }
         }
     }
 },

@@ -1,5 +1,5 @@
 <!-- index.html for elDdViewer-->
-<!-- 2019.07.03 -->
+<!-- 2019.07.12 -->
 
 <!doctype html>
 <html lang="ja">
@@ -60,7 +60,7 @@ table td, th{
 <header>
 </header>
 <main>
-<div class="container" id="app">
+<div class="container-fluid" id="app">
     <div class="card">
 	<!-- header -->
         <div class="card-header py-1">
@@ -126,6 +126,7 @@ table td, th{
 	<!-- body -->
         <div class="card-body">
           <table class="table border my-0">
+<!--           <table class="table table-bordered my-0"> -->
             <theader>
                 <tr>
                   <template v-if="rbLanguage === 'japanese'">
@@ -158,6 +159,7 @@ table td, th{
 
           <div id="wrapper">
             <table class="table">
+<!--             <table class="table table-bordered"> -->
               <tbody>
                 <tr v-for="appendix in appendix_list" v-bind:id="appendix.id" tabindex="0" >
                   <td class="col1">{{ appendix.name }}</td>
