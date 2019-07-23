@@ -1,6 +1,6 @@
 const jsonData = {
     "metaData":{
-        "date":"2019-07-11",
+        "date":"2019-07-17",
         "release":"L",
         "version":"3.1.2"
     },
@@ -9666,6 +9666,154 @@ const jsonData = {
         }
     }
 },
+"0x02A6":{
+    "validRelease":{"from":"L", "to":"latest"},
+    "className":{"ja":"ハイブリッド給湯器", "en":"Hybrid Water Heater"},
+    "elProperties":{
+        "0xB0":{
+            "propertyName":{"ja":"沸き上げ自動設定", "en":"Automatic water heating setting"},
+            "validRelease":{"from":"L", "to":"latest"},
+            "accessRule":{"get":"optional", "set":"optional", "inf":"required"},
+            "data":{
+                "type":"state",
+                "size":1,
+                "enum":[
+                    {"edt":"0x41", "state":{"ja":"自動沸き上げ", "en":"Auto Heating"}},
+                    {"edt":"0x43", "state":{"ja":"手動沸き上げ停止", "en":"Manual No Heating"}},
+                    {"edt":"0x42", "state":{"ja":"手動沸き上げ", "en":"Manual Heating"}}
+                ]
+            }
+        },
+        "0xB2":{
+            "propertyName":{"ja":"給湯沸き上げ中状態", "en":"XXX"},
+            "validRelease":{"from":"L", "to":"latest"},
+            "accessRule":{"get":"optional", "set":"notApplicable", "inf":"required"},
+            "data":{
+                "type":"state",
+                "size":1,
+                "enum":[
+                    {"edt":"0x41", "state":{"ja":"沸き上げ中", "en":"Heating"}},
+                    {"edt":"0x42", "state":{"ja":"非沸き上げ中", "en":"Not Heating"}}
+                ]
+            }
+        },
+        "0xB3":{
+            "propertyName":{"ja":"暖房沸き上げ中状態", "en":"XXX"},
+            "validRelease":{"from":"L", "to":"latest"},
+            "accessRule":{"get":"optional", "set":"notApplicable", "inf":"optional"},
+            "data":{
+                "type":"state",
+                "size":1,
+                "enum":[
+                    {"edt":"0x41", "state":{"ja":"沸き上げ中", "en":"Heating"}},
+                    {"edt":"0x42", "state":{"ja":"非沸き上げ中", "en":"Not Heating"}}
+                ]
+            }
+        },
+        "0xB6":{
+            "propertyName":{"ja":"補助熱源機給湯モード設定", "en":"XXX"},
+            "validRelease":{"from":"L", "to":"latest"},
+            "accessRule":{"get":"optional", "set":"optional", "inf":"optional"},
+            "data":{
+                "type":"state",
+                "size":1,
+                "enum":[
+                    {"edt":"0x41", "state":{"ja":"設定する", "en":"XXX"}},
+                    {"edt":"0x42", "state":{"ja":"設定しない", "en":"XXX"}}
+                ]
+            }
+        },
+        "0xB7":{
+            "propertyName":{"ja":"補助熱源機暖房モード設定", "en":"XXX"},
+            "validRelease":{"from":"L", "to":"latest"},
+            "accessRule":{"get":"optional", "set":"optional", "inf":"optional"},
+            "data":{
+                "type":"state",
+                "size":1,
+                "enum":[
+                    {"edt":"0x41", "state":{"ja":"設定する", "en":"XXX"}},
+                    {"edt":"0x42", "state":{"ja":"設定しない", "en":"XXX"}}
+                ]
+            }
+        },
+        "0xB8":{
+            "propertyName":{"ja":"太陽光発電連携モード設定", "en":"XXX"},
+            "validRelease":{"from":"L", "to":"latest"},
+            "accessRule":{"get":"required", "set":"required", "inf":"required"},
+            "data":{
+                "type":"state",
+                "size":1,
+                "enum":[
+                    {"edt":"0x41", "state":{"ja":"モード切", "en":"XXX"}},
+                    {"edt":"0x42", "state":{"ja":"自家消費", "en":"XXX"}},
+                    {"edt":"0x43", "state":{"ja":"売電優先", "en":"XXX"}},
+                    {"edt":"0x44", "state":{"ja":"経済性考慮", "en":"XXX"}}
+                ]
+            }
+        },
+        "0xB9":{
+            "propertyName":{"ja":"太陽光発電利用時間", "en":"XXX"},
+            "validRelease":{"from":"L", "to":"latest"},
+            "accessRule":{"get":"optional", "set":"optional", "inf":"optional"},
+            "data":{
+                "type":"object",
+                "properties":[
+                    {
+                        "name":"Start time",
+                        "element":{
+                            "type":"time",
+                            "size":2
+                        }
+                    },
+                    {
+                        "name":"End time",
+                        "element":{
+                            "type":"time",
+                            "size":2
+                        }
+                    }
+                ]
+            }
+        },
+        "0xC3":{
+            "propertyName":{"ja":"給湯中状態", "en":"Hot water supply status"},
+            "validRelease":{"from":"L", "to":"latest"},
+            "accessRule":{"get":"optional", "set":"notApplicable", "inf":"required"},
+            "data":{
+                "type":"state",
+                "size":1,
+                "enum":[
+                    {"edt":"0x41", "state":{"ja":"給湯中", "en":"Supplying"}},
+                    {"edt":"0x42", "state":{"ja":"非給湯中", "en":"Not Supplying"}}
+                ]
+            }
+        },
+        "0xE1":{
+            "propertyName":{"ja":"残湯量計測値", "en":"Measured amount of water remaining in tank"},
+            "validRelease":{"from":"L", "to":"latest"},
+            "accessRule":{"get":"optional", "set":"notApplicable", "inf":"optional"},
+            "data":{
+                "type":"number",
+                "format":"uint16",
+                "unit":"L",
+                "minimum":0,
+                "maximum":65533
+            }
+        },
+        "0xE2":{
+            "propertyName":{"ja":"タンク容量値", "en":"Tank capacity"},
+            "validRelease":{"from":"L", "to":"latest"},
+            "accessRule":{"get":"optional", "set":"notApplicable", "inf":"optional"},
+            "data":{
+                "type":"number",
+                "format":"uint16",
+                "unit":"L",
+                "minimum":0,
+                "maximum":65533
+            }
+        }
+    }
+},
 "0x03B7":{
     "validRelease":{"from":"A", "to":"latest"},
     "className":{"ja":"冷凍冷蔵庫", "en":"refrigerator"},
@@ -10057,154 +10205,6 @@ const jsonData = {
             "accessRule":{"get":"optional", "set":"optional", "inf":"optional"},
             "data":{ "$ref":"#/definitions/number_1-255" },
             "note":{"ja":"最大値はEPC=0xE0の値", "en":"maximum value is at EPC=0xE0"}
-        }
-    }
-},
-"0x02A6":{
-    "validRelease":{"from":"L", "to":"latest"},
-    "className":{"ja":"ハイブリッド給湯器", "en":"Hybrid Water Heater"},
-    "elProperties":{
-        "0xB0":{
-            "propertyName":{"ja":"沸き上げ自動設定", "en":"Automatic water heating setting"},
-            "validRelease":{"from":"L", "to":"latest"},
-            "accessRule":{"get":"optional", "set":"optional", "inf":"required"},
-            "data":{
-                "type":"state",
-                "size":1,
-                "enum":[
-                    {"edt":"0x41", "state":{"ja":"自動沸き上げ", "en":"Auto Heating"}},
-                    {"edt":"0x43", "state":{"ja":"手動沸き上げ停止", "en":"Manual No Heating"}},
-                    {"edt":"0x42", "state":{"ja":"手動沸き上げ", "en":"Manual Heating"}}
-                ]
-            }
-        },
-        "0xB2":{
-            "propertyName":{"ja":"給湯沸き上げ中状態", "en":"XXX"},
-            "validRelease":{"from":"L", "to":"latest"},
-            "accessRule":{"get":"optional", "set":"notApplicable", "inf":"required"},
-            "data":{
-                "type":"state",
-                "size":1,
-                "enum":[
-                    {"edt":"0x41", "state":{"ja":"沸き上げ中", "en":"Heating"}},
-                    {"edt":"0x42", "state":{"ja":"非沸き上げ中", "en":"Not Heating"}}
-                ]
-            }
-        },
-        "0xB3":{
-            "propertyName":{"ja":"暖房沸き上げ中状態", "en":"XXX"},
-            "validRelease":{"from":"L", "to":"latest"},
-            "accessRule":{"get":"optional", "set":"notApplicable", "inf":"optional"},
-            "data":{
-                "type":"state",
-                "size":1,
-                "enum":[
-                    {"edt":"0x41", "state":{"ja":"沸き上げ中", "en":"Heating"}},
-                    {"edt":"0x42", "state":{"ja":"非沸き上げ中", "en":"Not Heating"}}
-                ]
-            }
-        },
-        "0xB6":{
-            "propertyName":{"ja":"補助熱源機給湯モード設定", "en":"XXX"},
-            "validRelease":{"from":"L", "to":"latest"},
-            "accessRule":{"get":"optional", "set":"optional", "inf":"optional"},
-            "data":{
-                "type":"state",
-                "size":1,
-                "enum":[
-                    {"edt":"0x41", "state":{"ja":"設定する", "en":"XXX"}},
-                    {"edt":"0x42", "state":{"ja":"設定しない", "en":"XXX"}}
-                ]
-            }
-        },
-        "0xB7":{
-            "propertyName":{"ja":"補助熱源機暖房モード設定", "en":"XXX"},
-            "validRelease":{"from":"L", "to":"latest"},
-            "accessRule":{"get":"optional", "set":"optional", "inf":"optional"},
-            "data":{
-                "type":"state",
-                "size":1,
-                "enum":[
-                    {"edt":"0x41", "state":{"ja":"設定する", "en":"XXX"}},
-                    {"edt":"0x42", "state":{"ja":"設定しない", "en":"XXX"}}
-                ]
-            }
-        },
-        "0xB8":{
-            "propertyName":{"ja":"太陽光発電連携モード設定", "en":"XXX"},
-            "validRelease":{"from":"L", "to":"latest"},
-            "accessRule":{"get":"required", "set":"required", "inf":"required"},
-            "data":{
-                "type":"state",
-                "size":1,
-                "enum":[
-                    {"edt":"0x41", "state":{"ja":"モード切", "en":"XXX"}},
-                    {"edt":"0x42", "state":{"ja":"自家消費", "en":"XXX"}},
-                    {"edt":"0x43", "state":{"ja":"売電優先", "en":"XXX"}},
-                    {"edt":"0x44", "state":{"ja":"経済性考慮", "en":"XXX"}}
-                ]
-            }
-        },
-        "0xB9":{
-            "propertyName":{"ja":"太陽光発電利用時間", "en":"XXX"},
-            "validRelease":{"from":"L", "to":"latest"},
-            "accessRule":{"get":"optional", "set":"optional", "inf":"optional"},
-            "data":{
-                "type":"object",
-                "properties":[
-                    {
-                        "name":"Start time",
-                        "element":{
-                            "type":"time",
-                            "size":2
-                        }
-                    },
-                    {
-                        "name":"End time",
-                        "element":{
-                            "type":"time",
-                            "size":2
-                        }
-                    }
-                ]
-            }
-        },
-        "0xC3":{
-            "propertyName":{"ja":"給湯中状態", "en":"Hot water supply status"},
-            "validRelease":{"from":"L", "to":"latest"},
-            "accessRule":{"get":"optional", "set":"notApplicable", "inf":"required"},
-            "data":{
-                "type":"state",
-                "size":1,
-                "enum":[
-                    {"edt":"0x41", "state":{"ja":"給湯中", "en":"Supplying"}},
-                    {"edt":"0x42", "state":{"ja":"非給湯中", "en":"Not Supplying"}}
-                ]
-            }
-        },
-        "0xE1":{
-            "propertyName":{"ja":"残湯量計測値", "en":"Measured amount of water remaining in tank"},
-            "validRelease":{"from":"L", "to":"latest"},
-            "accessRule":{"get":"optional", "set":"notApplicable", "inf":"optional"},
-            "data":{
-                "type":"number",
-                "format":"uint16",
-                "unit":"L",
-                "minimum":0,
-                "maximum":65533
-            }
-        },
-        "0xE2":{
-            "propertyName":{"ja":"タンク容量値", "en":"Tank capacity"},
-            "validRelease":{"from":"L", "to":"latest"},
-            "accessRule":{"get":"optional", "set":"notApplicable", "inf":"optional"},
-            "data":{
-                "type":"number",
-                "format":"uint16",
-                "unit":"L",
-                "minimum":0,
-                "maximum":65533
-            }
         }
     }
 },
