@@ -1,3 +1,0 @@
-Release note:	Appendix viewer
-
-v1.0.0	2019.07.12	first release
