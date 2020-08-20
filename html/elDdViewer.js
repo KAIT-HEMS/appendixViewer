@@ -1,18 +1,20 @@
 // elDdviewer.js
-// 2019.07.03
+// 2020.08.20
 
+let globalVersionInfo = '2020-08-20'
 let globalNotes = {};   // 備考欄のデータを保持するため
+let globalBitmaps = {};   // value range欄のbitmapデータを保持するため
 var vm = new Vue({
     el: '#app',
     data: {
-        rbView: 'specSheet',
-        rbLanguage: 'japanese',
-        appendix_list: [],  // v-for で使う
-        packetDetail: '',
-        deviceSelected: '0x0130',
-        deviceList: [],
-        releaseSelected: '',
-        releaseList: [],
+        rbView: 'specSheet',       // selected radio button for sheet selection(pending)
+        rbLanguage: 'japanese',    // selected radio button for language selection
+        appendix_list: [],         // array of each property info
+        packetDetail: '',          // gabage code from SSNG
+        deviceSelected: '0x0130',  // selected device by pull down menu with default value
+        deviceList: [],            // list of device objects for a pull down menu
+        releaseSelected: '',       // selected release by pull down menu
+        releaseList: [],           // list of releases for a pull down menu
     },
     methods: {
         updateDevice: function () {
@@ -23,18 +25,25 @@ var vm = new Vue({
             console.log("updateRelease: ", this.releaseSelected);
             refresh();
         },
-        updateView: function () {
-            console.log("updateView, rbView:", this.rbView);
-            refresh();
-        },
         updateLanguage: function () {
             console.log("updateLanguage, rbLanguage:", this.rbLanguage);
             refresh();
         },
+        // card headerのi buttonをクリックしたときの動作
         informations: function () {
-            const message = "JSON data: " + jsonData.metaData.date + ", Relase:" + jsonData.metaData.release + ", Version:" + jsonData.metaData.version;
+            const message = "Appendix Viewer: " + globalVersionInfo +
+                            "\nJSON data: " + jsonData.metaData.date + 
+                            ", Release:" + jsonData.metaData.release + 
+                            ", Version:" + jsonData.metaData.version;
             window.alert(message);
         },
+        // 値域欄のbitmapをクリックしたときの動作
+        showBitmap: function (bitmapEpc) {
+        	window.localStorage.setItem('bitmap-title', 'EPC = ' + bitmapEpc);
+        	window.localStorage.setItem('bitmap-content', globalBitmaps[bitmapEpc]);
+        	window.open('bitmap.html', 'bitmap', 'width=600,height=300');
+        },
+        // 備考欄の*をクリックしたときの動作
         showNote: function (noteEpc) {
         	window.localStorage.setItem('note-title', 'Note for EPC = ' + noteEpc);
         	window.localStorage.setItem('note-content', globalNotes[noteEpc]);
@@ -115,11 +124,8 @@ function refresh() {
 
     // 選択された機器のDevice Objectを作成（その後の作業で中身をいじるため、コピーする）
     let deviceObjectOriginal = getDeviceDescriptionObj(selectedEoj, selectedRelease);
-    let deviceObject = JSON.parse(JSON.stringify(deviceObjectOriginal));
-//     console.log('refresh() deviceObjectOriginal', deviceObjectOriginal);
-    
+    let deviceObject = JSON.parse(JSON.stringify(deviceObjectOriginal));    
     let id = 0; // index for v-for.
-//     noteNumber =1;
     vm.appendix_list = [];
     for (const [key, property] of Object.entries(deviceObject.elProperties)) {
         let indexObject = null;
@@ -272,6 +278,7 @@ function createAppendixList(key, property, id, indexObject, indexOneOf) {
     } else {
         appendix.note = 'empty';
     }
+    // value range
     switch (property.data.type) {
         case 'state':
             appendix.propType = 'state';
@@ -322,18 +329,19 @@ function createAppendixList(key, property, id, indexObject, indexOneOf) {
             appendix.range = property.data.enum;
             appendix.dataType = 'unsigned char';
             appendix.dataSize = property.data.size;
-            console.log('numericValue');
             break;
         case 'level':
             appendix.propType = 'level';
             let maxValue = parseInt(property.data.base) + property.data.maximum - 1;
-            appendix.range = property.data.base + ' ... 0x' + toStringHex(maxValue, 1) + ': レベル';
+            appendix.range = property.data.base + ' ... 0x' + toStringHex(maxValue, 1) + ': Level';
             appendix.dataType = 'unsigned char';
             appendix.dataSize = 1;
             break;
         case 'bitmap':
             appendix.propType = 'bitmap';
             appendix.range = 'bitmap';
+            appendix.bitmap = key;
+            globalBitmaps[key] = JSON.stringify(property.data.bitmaps, null , 4);
             appendix.dataType = 'unsigned char';
             appendix.dataSize = property.data.size;
             break;
@@ -435,7 +443,8 @@ function createAppendixList(key, property, id, indexObject, indexOneOf) {
                     data:{
                         type:'objectHeader', 
                         name:arrayObject[i].name
-                    }
+                    },
+                    note:property.note
                 };
                 processOneOf(key, objectHeaderProperty, id, indexObject, indexOneOf);
 

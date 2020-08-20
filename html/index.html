@@ -1,211 +1,192 @@
 <!-- index.html for elDdViewer-->
-<!-- 2019.07.23 -->
+<!-- 2020.08.20 -->
+<!-- Hiroyuki Fujita -->
 
 <!doctype html>
 <html lang="ja">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link rel="stylesheet" href="lib/bootstrap/css/bootstrap.min.css">
-<link rel="stylesheet" href="lib/fontawesome-free/css/all.css">
-<title>ECHONET Lite Appendix</title>
-<style>
-body {
-  padding-top: 1rem;
-}
-table td, th{
-  word-break: break-all;
-  overflow-wrap : break-word;
-	font-family: Consolas, 'Courier New', Courier, Monaco, monospace;
-	font-size: 90%;
-	padding: 0.2em 1em;
-	cursor: pointer;
-/*	border-top: 1px solid #cccccc;*/
-}
-.card-deck {
-	margin-bottom: 20px;
-}
-.card-header {
-	padding: 0.1em 1em;
-}
-/*
-.card-contents {
-	height: 40em;
-	overflow-y: scroll;
-}
-*/
-.col1 {width: 16em;} /* プロパティ */
-.col2 {width: 5em;} /* EPC */
-.col3 {width: 16em;} /* 値域 */
-.col4 {width: 10em;} /* データ型 */
-.col5 {width: 5em;} /* データサイズ */
-.col6 {width: 8em;} /* 単位 */
-.col7 {width: 6em;} /* アクセスルール */
-.col8 {width: 4em;} /* 必須 */
-.col9 {width: 6em;} /* 状変時 */
-.col10 {width: 4em;} /* 備考 */
-.card-body {
-	margin: 0;
-	padding: 0;
-}
-#wrapper {
-/*	height: 40em;*/
-  height:80vh;
-  overflow-y: scroll;
-}
-</style>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <link rel="stylesheet" href="lib/bootstrap/css/bootstrap.min.css">
+  <link rel="stylesheet" href="lib/fontawesome-free/css/all.css">
+  <title>ECHONET Lite Appendix</title>
+  <style>
+    [v-cloak] {
+      display: none;
+    }
+    body {
+      padding-top: 1rem;
+    }
+    table td, th{
+      word-wrap: break-word;
+      word-break: break-word;
+      overflow-wrap : break-word;
+      font-family: Consolas, 'Courier New', Courier, Monaco, monospace;
+      font-size: 0.9rem;
+      cursor: pointer;
+    }
+    .col1 {width: 16rem;} /* プロパティ */
+    .col2 {width: 3rem;} /* EPC */
+    .col3 {width: 16rem;} /* 値域 */
+    .col4 {width: 10rem;} /* データ型 */
+    .col5 {width: 4rem;} /* データサイズ */
+    .col6 {width: 8rem;} /* 単位 */
+    .col7 {width: 5rem;} /* アクセスルール */
+    .col8 {width: 3rem;} /* 必須 */
+    .col9 {width: 6rem;} /* 状変時 */
+    .col10 {width: 4rem;} /* 備考 */
+    .card-body {
+      margin: 0;
+      padding: 0;
+    }
+    #scrollWindow {
+      height: 80vh;
+      overflow-y: scroll;
+    }
+  </style>
 </head>
 
 <body>
 <header>
 </header>
 <main>
-<div class="container-fluid" id="app">
+  <div class="container-fluid" id="app" v-cloak>
     <div class="card">
-	<!-- header -->
-        <div class="card-header py-1">
-            <div class="row">
+	    <!-- card header start-->
+      <div class="card-header py-2">
+        <div class="row">
+			  	<!-- device selection -->
+          <div class="col-auto pl-2 pr-0">
+            <select class="custom-select" v-model="deviceSelected" v-on:change="updateDevice">
+              <option v-for="device in deviceList" v-bind:value="device.eoj">
+                {{ device.name }}
+              </option>
+            </select>
+          </div>
 
-                <div class="col-auto pl-2 pr-0">
-                  <select class="custom-select" v-model="deviceSelected" v-on:change="updateDevice">
-                    <option v-for="device in deviceList" v-bind:value="device.eoj">
-                      {{ device.name }}
-                    </option>
-                  </select>
-                </div>
+          <!-- release version selection -->
+          <div class="col-1" pl-0 pr-0>
+            <select class="custom-select" v-model="releaseSelected" v-on:change="updateRelease">
+              <option v-for="release in releaseList" v-bind:value="release.name">
+                {{ release.name }}
+              </option>
+            </select>
+          </div>
+          <div class="col" pl-0 pr-0></div>
 
-                <div class="col-1" pl-0 pr-0>
-                  <select class="custom-select" v-model="releaseSelected" v-on:change="updateRelease">
-                    <option v-for="release in releaseList" v-bind:value="release.name">
-                      {{ release.name }}
-                    </option>
-                  </select>
-                </div>
-
-                <div class="col" pl-0 pr-0></div>
-              
-<!--
-                <div class="col-auto pl-0">
-                    <div class="input-group border ml-2">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text">View</span>
-                        </div>
-                        <div class="form-check form-check-inline pl-2">
-                            <input type="radio" class="form-check-input" id="specSheet" v-model="rbView" value="specSheet" v-on:change="updateView">
-                            <label for="specSheet" class="form-check-label ">Spec sheet</label>
-                        </div>
-                        <div class="form-check form-check-inline pl-0 mr-0">
-                            <input type="radio" class="form-check-input" id="standard" v-model="rbView" value="standard" v-on:change="updateView">
-                            <label for="standard" class="form-check-label">Standard</label>
-                        </div>
-                    </div>
-                </div>
--->
-
-                <div class="col-auto pl-0">
-                    <div class="input-group border ml-2">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text">Language</span>
-                        </div>
-                        <div class="form-check form-check-inline pl-2">
-                            <input type="radio" class="form-check-input" id="japanese" v-model="rbLanguage" value="japanese" v-on:change="updateLanguage">
-                            <label for="japanese" class="form-check-label">Japanese</label>
-                        </div>
-                        <div class="form-check form-check-inline pl-0 mr-0">
-                            <input type="radio" class="form-check-input" id="english" v-model="rbLanguage" value="english" v-on:change="updateLanguage">
-                            <label for="english" class="form-check-label ">English</label>
-                        </div>
-                    </div>
-                </div> 
-
-				<!-- infoボタン -->
-				<div class="btn" title="JSON version" v-on:click="informations"><i class="fas fa-info-circle"></i></div>
-
+			  	<!-- Language selection -->
+          <div class="col-auto pl-0">
+            <div class="input-group border ml-2">
+              <div class="input-group-prepend">
+                <span class="input-group-text">Language</span>
+              </div>
+              <div class="form-check form-check-inline pl-2">
+                <input type="radio" class="form-check-input" id="japanese" v-model="rbLanguage" value="japanese" v-on:change="updateLanguage">
+                <label for="japanese" class="form-check-label">Japanese</label>
+              </div>
+              <div class="form-check form-check-inline pl-0 mr-0">
+                <input type="radio" class="form-check-input" id="english" v-model="rbLanguage" value="english" v-on:change="updateLanguage">
+                <label for="english" class="form-check-label ">English</label>
+              </div>
             </div>
+          </div> 
+
+		  		<!-- infoボタン -->
+          <div class="btn" title="JSON version" v-on:click="informations"><i class="fas fa-info-circle"></i></div>
         </div>
-	<!-- body -->
-        <div class="card-body">
-          <table class="table border my-0">
-<!--           <table class="table table-bordered my-0"> -->
-            <theader>
-                <tr>
-                  <template v-if="rbLanguage === 'japanese'">
-                    <th scope="col" class="col1">プロパティ</th>
-                    <th scope="col" class="col2">EPC</th>
-                    <th scope="col" class="col3">値域</th>
-                    <th scope="col" class="col4">データ型</th>
-                    <th scope="col" class="col5">データサイズ</th>
-                    <th scope="col" class="col6">単位</th>
-                    <th scope="col" class="col7">アクセスルール</th>
-                    <th scope="col" class="col8">必須</th>
-                    <th scope="col" class="col9">状変時アナウンス</th>
-                    <th scope="col" class="col10">備考</th>
-                  </template>
-                  <template v-if="rbLanguage === 'english'">
-                    <th scope="col" class="col1">Property</th>
-                    <th scope="col" class="col2">EPC</th>
-                    <th scope="col" class="col3">Data range</th>
-                    <th scope="col" class="col4">Data type</th>
-                    <th scope="col" class="col5">Data size</th>
-                    <th scope="col" class="col6">unit</th>
-                    <th scope="col" class="col7">Access rule</th>
-                    <th scope="col" class="col8">Required</th>
-                    <th scope="col" class="col9">Announce on change</th>
-                    <th scope="col" class="col10">note</th>
-                  </template>
-                </tr>
-            </theader>
+      </div>
+	    <!-- card header end-->
+
+      <!-- card body start-->
+      <div class="card-body">
+        <!-- Fixed line for title-->
+        <table class="table table-bordered table-sm my-0 ">
+          <thead class="thead-light">
+            <tr>
+              <template v-if="rbLanguage === 'japanese'">
+                <th scope="col" class="col1">プロパティ</th>
+                <th scope="col" class="col2">EPC</th>
+                <th scope="col" class="col3">値域</th>
+                <th scope="col" class="col4">データ型</th>
+                <th scope="col" class="col5">データ サイズ</th>
+                <th scope="col" class="col6">単位</th>
+                <th scope="col" class="col7" style="word-wrap:break-word;">アクセスルール</th>
+                <th scope="col" class="col8">必須</th>
+                <th scope="col" class="col9">状変時アナウンス</th>
+                <th scope="col" class="col10">備考</th>
+              </template>
+              <template v-if="rbLanguage === 'english'">
+                <th scope="col" class="col1">Property</th>
+                <th scope="col" class="col2">EPC</th>
+                <th scope="col" class="col3">Data range</th>
+                <th scope="col" class="col4">Data type</th>
+                <th scope="col" class="col5">Data size</th>
+                <th scope="col" class="col6">Unit</th>
+                <th scope="col" class="col7">Access rule</th>
+                <th scope="col" class="col8">Required</th>
+                <th scope="col" class="col9">Announce on change</th>
+                <th scope="col" class="col10">Note</th>
+              </template>
+            </tr>
+          </thead>
+        </table>
+
+        <!-- Scrollable for contents data area -->
+        <div id="scrollWindow">
+          <table class="table table-sm">
+            <tbody>
+              <tr v-for="appendix in appendix_list" v-bind:id="appendix.id" tabindex="0" >
+                <td class="col1">{{ appendix.name }}</td>
+                <td class="col2">{{ appendix.epc }}</td>
+
+                <!-- Column data value range start -->
+                <template v-if="appendix.propType === 'state'">
+                  <table>
+                    <tr v-for="item in appendix.range" tabindex="0" >
+                    <template v-if="rbLanguage === 'japanese'">
+                      <td class="col3">{{ item.edt }}:{{ item.state.ja }}</td>
+                    </template>
+                    <template v-if="rbLanguage === 'english'">
+                      <td class="col3">{{ item.edt }}:{{ item.state.en }}</td>
+                    </template>
+                  </table>
+                </template>
+                <template v-else-if="appendix.propType === 'numericValue'">
+                  <table>
+                    <tr v-for="item in appendix.range" tabindex="0" >
+                      <td class="col3">{{ item.edt }}:{{ item.numericValue }}</td>
+                  </table>
+                </template>
+                <template v-else-if="appendix.propType === 'bitmap'">
+                  <!-- <td class="col3">{{ appendix.range }}</td> -->
+                  <td class="col3" v-on:click="showBitmap(appendix.bitmap)">bitmap</td>
+                </template>
+                <template v-else>
+                  <td class="col3">{{ appendix.range }}</td>
+                </template>
+                <!-- Column data value range end -->
+
+                <td class="col4">{{ appendix.dataType }}</td>
+                <td class="col5">{{ appendix.dataSize }}</td>
+                <td class="col6">{{ appendix.unit }}</td>
+                <td class="col7">{{ appendix.accessRule }}</td>
+                <td class="col8">{{ appendix.accessRuleRequired }}</td>
+                <td class="col9">{{ appendix.inf }}</td>
+                <!-- Column note -->
+                <template v-if="appendix.note === 'empty'">
+                  <td class="col10"></td>
+                </template>
+                <template v-else>
+                  <td class="col10" v-on:click="showNote(appendix.note)">*</td>
+                </template>
+              </tr>
+            </tbody>
           </table>
-
-          <div id="wrapper">
-            <table class="table">
-<!--             <table class="table table-bordered"> -->
-              <tbody>
-                <tr v-for="appendix in appendix_list" v-bind:id="appendix.id" tabindex="0" >
-                  <td class="col1">{{ appendix.name }}</td>
-                  <td class="col2">{{ appendix.epc }}</td>
-                  <template v-if="appendix.propType === 'state'">
-                    <table>
-                      <tr v-for="item in appendix.range" tabindex="0" >
-                      <template v-if="rbLanguage === 'japanese'">
-                        <td class="col3">{{ item.edt }}:{{ item.state.ja }}</td>
-                      </template>
-                      <template v-if="rbLanguage === 'english'">
-                        <td class="col3">{{ item.edt }}:{{ item.state.en }}</td>
-                      </template>
-                    </table>
-                  </template>
-                  <template v-else-if="appendix.propType === 'numericValue'">
-                    <table>
-                      <tr v-for="item in appendix.range" tabindex="0" >
-                        <td class="col3">{{ item.edt }}:{{ item.numericValue }}</td>
-                    </table>
-                  </template>
-                  <template v-else>
-                    <td class="col3">{{ appendix.range }}</td>
-                  </template>
-                  <td class="col4">{{ appendix.dataType }}</td>
-                  <td class="col5">{{ appendix.dataSize }}</td>
-                  <td class="col6">{{ appendix.unit }}</td>
-                  <td class="col7">{{ appendix.accessRule }}</td>
-                  <td class="col8">{{ appendix.accessRuleRequired }}</td>
-                  <td class="col9">{{ appendix.inf }}</td>
-                  <template v-if="appendix.note === 'empty'">
-                      <td class="col10"></td>
-                  </template>
-                  <template v-else>
-                    <td class="col10" v-on:click="showNote(appendix.note)">*</td>
-                  </template>
-                </tr>
-              </tbody>
-            </table>
-            </div>
-
-      
         </div>
-
+      </div>
+      <!-- card body end-->
     </div>
-</div>
+  </div>
 </main>
 
 <script src="lib/jquery-3.3.1.min.js"></script>
