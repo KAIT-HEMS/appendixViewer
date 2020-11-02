@@ -2,8 +2,8 @@ const jsonData = {
 "metaData":{
   "date":"2020-11-02",
   "release":"M",
-  "version":"3.2.0rc1",
-  "note":{"ja":"data type 'time' に maximumOfHourを追加", "en":"addition of maximumOfHour to the data type of 'time'."},
+  "version":"3.1.7rc2",
+  "note":{"ja":"WebAPI WGでのレビュー後のupdate", "en":"Update after a review by WebAPI WG"},
   "Copyright":"(C) 2020 Kanagawa Institute of Technology"
 },
 "definitions":{
@@ -873,7 +873,7 @@ const jsonData = {
                       { "$ref":"#/definitions/number_0-99999999", "unit":"kWh", "coefficient":["0xC2"] },
                       {
                           "type":"state",
-                          "size":4,
+                          "size":2,
                           "enum":[
                               {"edt":"0xFFFFFFFE", "state":{"ja":"No data","en":"No data"}}
                           ]
@@ -2294,7 +2294,7 @@ const jsonData = {
           "validRelease":{"from":"A", "to":"latest"},
           "propertyName":{"ja":"ONタイマ相対時間設定値", "en":"ON timer setting(relative time)"},
           "accessRule":{"get":"optional", "set":"optional", "inf":"optional"},
-          "data":{ "type":"time", "size":2,  "maximumOfHour":255 }
+          "data":{ "type":"time", "size":2 }
       },
       "0x94":{
           "validRelease":{"from":"A", "to":"latest"},
@@ -2322,7 +2322,7 @@ const jsonData = {
           "validRelease":{"from":"A", "to":"latest"},
           "propertyName":{"ja":"OFFタイマ相対時間設定値", "en":"OFF timer setting(relative time)"},
           "accessRule":{"get":"optional", "set":"optional", "inf":"optional"},
-          "data":{ "type":"time", "size":2,  "maximumOfHour":255 }
+          "data":{ "type":"time", "size":2 }
       },
       "0xA0":{
           "oneOf":[
@@ -14649,7 +14649,7 @@ const jsonData = {
           "validRelease":{"from":"A", "to":"latest"},
           "propertyName":{"ja":"ONタイマ相対時間設定値", "en":"ON timer setting(relative time)"},
           "accessRule":{"get":"optional", "set":"optional", "inf":"optional"},
-          "data":{ "type":"time", "size":2,  "maximumOfHour":255 }
+          "data":{ "type":"time", "size":2 }
       },
       "0xB0":{
           "validRelease":{"from":"A", "to":"latest"},
@@ -14884,7 +14884,7 @@ const jsonData = {
           "accessRule":{"get":"optional", "set":"notApplicable", "inf":"optional"},
           "data":{
               "oneOf":[
-                  { "type":"time", "size":2, "maximumOfHour":254 },
+                  { "type":"time", "size":2 },
                   {
                     "type":"state",
                     "size":2,
@@ -14901,7 +14901,7 @@ const jsonData = {
           "accessRule":{"get":"optional", "set":"notApplicable", "inf":"optional"},
           "data":{
               "oneOf":[
-                  { "type":"time", "size":2, "maximumOfHour":254 },
+                  { "type":"time", "size":2 },
                   {
                     "type":"state",
                     "size":2,
@@ -14916,7 +14916,7 @@ const jsonData = {
           "validRelease":{"from":"A", "to":"latest"},
           "propertyName":{"ja":"ONタイマ経過時間", "en":"Elapsed time on the ON timer"},
           "accessRule":{"get":"optional", "set":"notApplicable", "inf":"optional"},
-          "data":{ "type":"time", "size":2,  "maximumOfHour":255 }
+          "data":{ "type":"time", "size":2 }
       },
       "0xE1":{
           "validRelease":{"from":"A", "to":"latest"},
@@ -15130,7 +15130,7 @@ const jsonData = {
           "accessRule":{"get":"optional", "set":"notApplicable", "inf":"optional"},
           "data":{
               "oneOf":[
-                  {   "type":"time", "size":2, "maximumOfHour":254 },
+                  {   "type":"time", "size":2 },
                   {
                       "type":"state",
                       "size":2,
@@ -15247,7 +15247,7 @@ const jsonData = {
           "validRelease":{"from":"M", "to":"latest"},
           "propertyName":{"ja":"ONタイマ相対時間設定値", "en":"ON timer setting(relative time)"},
           "accessRule":{"get":"optional", "set":"optional", "inf":"optional"},
-          "data":{ "type":"time", "size":2,  "maximumOfHour":255 }
+          "data":{ "type":"time", "size":2 }
       },
       "0xB0":{
           "validRelease":{"from":"M", "to":"latest"},
@@ -15584,7 +15584,7 @@ const jsonData = {
           "accessRule":{"get":"optional", "set":"notApplicable", "inf":"optional"},
           "data":{
               "oneOf":[
-                  { "type":"time", "size":2, "maximumOfHour":254 },
+                  { "type":"time", "size":2 },
                   { "$ref":"#/definitions/state_Undefined-FFFF" }
               ]
           }
@@ -15595,7 +15595,7 @@ const jsonData = {
           "accessRule":{"get":"optional", "set":"notApplicable", "inf":"optional"},
           "data":{
               "oneOf":[
-                  { "type":"time", "size":2, "maximumOfHour":254 },
+                  { "type":"time", "size":2 },
                   { "$ref":"#/definitions/state_Undefined-FFFF" }
               ]
           }
@@ -15606,7 +15606,7 @@ const jsonData = {
           "accessRule":{"get":"optional", "set":"notApplicable", "inf":"optional"},
           "data":{
               "oneOf":[
-                  { "type":"time", "size":2, "maximumOfHour":254 },
+                  { "type":"time", "size":2 },
                   { "$ref":"#/definitions/state_Undefined-FFFF" }
               ]
           }
@@ -15617,7 +15617,7 @@ const jsonData = {
           "accessRule":{"get":"optional", "set":"notApplicable", "inf":"optional"},
           "data":{
               "oneOf":[
-                  { "type":"time", "size":2, "maximumOfHour":254 },
+                  { "type":"time", "size":2 },
                   { "$ref":"#/definitions/state_Undefined-FFFF" }
               ]
           }
@@ -15628,7 +15628,7 @@ const jsonData = {
           "accessRule":{"get":"optional", "set":"notApplicable", "inf":"optional"},
           "data":{
               "oneOf":[
-                  { "type":"time", "size":2, "maximumOfHour":254 },
+                  { "type":"time", "size":2 },
                   { "$ref":"#/definitions/state_Undefined-FFFF" }
               ]
           }
@@ -15639,7 +15639,7 @@ const jsonData = {
           "accessRule":{"get":"optional", "set":"notApplicable", "inf":"optional"},
           "data":{
               "oneOf":[
-                  { "type":"time", "size":2, "maximumOfHour":254 },
+                  { "type":"time", "size":2 },
                   { "$ref":"#/definitions/state_Undefined-FFFF" }
               ]
           }
@@ -15650,7 +15650,7 @@ const jsonData = {
           "accessRule":{"get":"optional", "set":"notApplicable", "inf":"optional"},
           "data":{
               "oneOf":[
-                  { "type":"time", "size":2, "maximumOfHour":254 },
+                  { "type":"time", "size":2 },
                   { "$ref":"#/definitions/state_Undefined-FFFF" }
               ]
           }
@@ -15659,30 +15659,7 @@ const jsonData = {
           "validRelease":{"from":"M", "to":"latest"},
           "propertyName":{"ja":"保管経過時間", "en":"Storing elapsed time"},
           "accessRule":{"get":"optional", "set":"notApplicable", "inf":"optional"},
-          "data":{
-              "oneOf":[
-                  {
-                      "type":"object",
-                      "properties":[
-                          {
-                              "name":"day",
-                              "element":{ "$ref":"#/definitions/number_0-254" }
-                          },
-                          {
-                              "name":"hourAndMinute",
-                              "element":{ "type":"time", "size":2 }
-                          }
-                      ]
-                  },
-                  {
-                      "type":"state",
-                      "size":3,
-                      "enum":[
-                          {"edt":"0xFFFFFF", "state":{"ja":"残り時間不明","en":"Remaining time unknown"} }
-                      ]
-                  }
-              ]
-          }
+          "data":{ "$ref":"#/definitions/raw_3" }
       },
       "0xEF":{
           "validRelease":{"from":"M", "to":"latest"},

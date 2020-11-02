@@ -353,7 +353,6 @@ function createAppendixList(key, property, id, indexObject, indexOneOf) {
             appendix.propType = 'date-time';
             appendix.dataType = 'unsigned char';
             appendix.dataSize = (property.data.size) ? property.data.size : 7;
-            console.log("date-time", (typeof appendix.dataSize), appendix.dataSize);
             switch (appendix.dataSize) {
                 case 2:
                     appendix.range = 'YYYY YYYY:0~9999 0x0000~0x270F';
@@ -362,7 +361,6 @@ function createAppendixList(key, property, id, indexObject, indexOneOf) {
                     appendix.range = 'YYYY:MM YYYY:0~9999 0x0000~0x270F, MM:0~12 0x00~0x0C';
                     break;
                 case 4:
-                    console.log("case 4");
                     appendix.range = 'YYYY:MM:DD YYYY:0~9999 0x0000~0x270F, MM:0~12 0x00~0x0C, DD:0~31 0x00~0x1F';
                     break;
                 case 5:
@@ -372,30 +370,28 @@ function createAppendixList(key, property, id, indexObject, indexOneOf) {
                     appendix.range = 'YYYY:MM:DD:hh:mm YYYY:0~9999 0x0000~0x270F, MM:0~12 0x00~0x0C, DD:0~31 0x00~0x1F, hh:0~23 0x00~0x17, mm:0~59 0x00~0x3B';
                     break;
                 case 7:
-                    console.log("case 7");
                     appendix.range = 'YYYY:MM:DD:hh:mm:ss YYYY:0~9999 0x0000~0x270F, MM:0~12 0x00~0x0C, DD:0~31 0x00~0x1F, hh:0~23 0x00~0x17, mm:0~59 0x00~0x3B, ss:0~59 0x00~0x3B';
                     break;
                 default:
-                    console.log("case default");
                     appendix.range = 'date-time(default)';
             }
-            console.log("appendix.range:", appendix.range);
             break;
         case 'time':
             appendix.propType = 'time';
             appendix.dataSize = (property.data.size) ? property.data.size : 3;
+            const hourMax = (property.data.maximumOfHour) ? property.data.maximumOfHour : 23;
             switch (appendix.dataSize) {
                 case 1:
                     appendix.dataType = 'unsigned char x 1';
-                    appendix.range = 'HH HH:0~23 0x00~0x17';
+                    appendix.range = 'HH HH:0~' + hourMax + ' 0x00~0x' + hourMax.toString(16).toUpperCase();
                     break;
                 case 2:
                     appendix.dataType = 'unsigned char x 2';
-                    appendix.range = 'HH:MM HH:0~23 0x00~0x17, MM:0~59 0x00~0x3B';
+                    appendix.range = 'HH:MM HH:0~' + hourMax + ' 0x00~0x' + hourMax.toString(16).toUpperCase() + ', MM:0~59 0x00~0x3B';
                     break;
                 case 3:
                     appendix.dataType = 'unsigned char x 3';
-                    appendix.range = 'HH:MM:SS HH:0~23 0x00~0x17, MM:0~59 0x00~0x3B, SS:0~59 0x00~0x3B';
+                    appendix.range = 'HH:MM:SS HH:0~' + hourMax + ' 0x00~0x' + hourMax.toString(16).toUpperCase() + ', MM:0~59 0x00~0x3B, SS:0~59 0x00~0x3B';
                     break;
                 default:
                     appendix.range = 'time';
