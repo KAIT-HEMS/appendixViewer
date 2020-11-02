@@ -1,7 +1,7 @@
 // elDdviewer.js
-// 2020.08.20
+// 2020.11.02
 
-let globalVersionInfo = '2020-08-20'
+let globalVersionInfo = '2020-11-02'
 let globalNotes = {};   // 備考欄のデータを保持するため
 let globalBitmaps = {};   // value range欄のbitmapデータを保持するため
 var vm = new Vue({
@@ -284,15 +284,19 @@ function createAppendixList(key, property, id, indexObject, indexOneOf) {
             appendix.propType = 'state';
             appendix.range = property.data.enum;
             appendix.dataType = 'unsigned char';
-            appendix.dataSize = property.data.size;    
+            appendix.dataSize = property.data.size;
             break;
         case 'number':
             appendix.propType = 'number';
             if (property.data.enum) {
                 appendix.range = property.data.enum;
+                console.log(appendix.range);
             } else {
-                // ３けた区切りのコンマを追加
-                appendix.range = (new Intl.NumberFormat().format(property.data.minimum)) + ' ~ ' + (new Intl.NumberFormat().format(property.data.maximum));
+                const multiple = property.data.multipleOf ? property.data.multipleOf : 1;
+                // ３けた区切りのコンマを追加 (Intl.NumberFormat)
+                const digit = (new Intl.NumberFormat().format(property.data.minimum * multiple)) + ' ~ ' + (new Intl.NumberFormat().format(property.data.maximum * multiple));
+                const hex = '0x' + property.data.minimum.toString(16).toUpperCase() + ' ~ 0x' + property.data.maximum.toString(16).toUpperCase();
+                appendix.range = digit + ' ' + hex;
             }
             appendix.dataType = property.data.format;
             appendix.unit = property.data.unit;
@@ -349,28 +353,33 @@ function createAppendixList(key, property, id, indexObject, indexOneOf) {
             appendix.propType = 'date-time';
             appendix.dataType = 'unsigned char';
             appendix.dataSize = (property.data.size) ? property.data.size : 7;
+            console.log("date-time", (typeof appendix.dataSize), appendix.dataSize);
             switch (appendix.dataSize) {
                 case 2:
-                    appendix.range = 'YYYY';
+                    appendix.range = 'YYYY YYYY:0~9999 0x0000~0x270F';
                     break;
                 case 3:
-                    appendix.range = 'YYYYMM';
+                    appendix.range = 'YYYY:MM YYYY:0~9999 0x0000~0x270F, MM:0~12 0x00~0x0C';
                     break;
                 case 4:
-                    appendix.range = 'YYYYMMDD';
+                    console.log("case 4");
+                    appendix.range = 'YYYY:MM:DD YYYY:0~9999 0x0000~0x270F, MM:0~12 0x00~0x0C, DD:0~31 0x00~0x1F';
                     break;
                 case 5:
-                    appendix.range = 'YYYYMMDDHH';
+                    appendix.range = 'YYYY:MM:DD:hh YYYY:0~9999 0x0000~0x270F, MM:0~12 0x00~0x0C, DD:0~31 0x00~0x1F, hh:0~23 0x00~0x17';
                     break;
                 case 6:
-                    appendix.range = 'YYYYMMDDHHMM';
+                    appendix.range = 'YYYY:MM:DD:hh:mm YYYY:0~9999 0x0000~0x270F, MM:0~12 0x00~0x0C, DD:0~31 0x00~0x1F, hh:0~23 0x00~0x17, mm:0~59 0x00~0x3B';
                     break;
                 case 7:
-                    appendix.range = 'YYYYMMDDHHMMSS';
+                    console.log("case 7");
+                    appendix.range = 'YYYY:MM:DD:hh:mm:ss YYYY:0~9999 0x0000~0x270F, MM:0~12 0x00~0x0C, DD:0~31 0x00~0x1F, hh:0~23 0x00~0x17, mm:0~59 0x00~0x3B, ss:0~59 0x00~0x3B';
                     break;
                 default:
-                    appendix.range = 'date-time';
+                    console.log("case default");
+                    appendix.range = 'date-time(default)';
             }
+            console.log("appendix.range:", appendix.range);
             break;
         case 'time':
             appendix.propType = 'time';
@@ -378,15 +387,15 @@ function createAppendixList(key, property, id, indexObject, indexOneOf) {
             switch (appendix.dataSize) {
                 case 1:
                     appendix.dataType = 'unsigned char x 1';
-                    appendix.range = 'HH';
+                    appendix.range = 'HH HH:0~23 0x00~0x17';
                     break;
                 case 2:
                     appendix.dataType = 'unsigned char x 2';
-                    appendix.range = 'HH:MM';
+                    appendix.range = 'HH:MM HH:0~23 0x00~0x17, MM:0~59 0x00~0x3B';
                     break;
                 case 3:
                     appendix.dataType = 'unsigned char x 3';
-                    appendix.range = 'HH:MM:SS';
+                    appendix.range = 'HH:MM:SS HH:0~23 0x00~0x17, MM:0~59 0x00~0x3B, SS:0~59 0x00~0x3B';
                     break;
                 default:
                     appendix.range = 'time';
@@ -406,7 +415,7 @@ function createAppendixList(key, property, id, indexObject, indexOneOf) {
             appendix.propType = 'arrayHeader';
             const minItems = (property.data.minItems) ? property.data.minItems : 1;
             const itemCount = (property.data.minItems == property.data.maxItems) ? minItems : (minItems + ' ~ ' + property.data.maxItems);
-            appendix.dataType = property.data.itemSize + 'byte X ' + itemCount;
+            appendix.dataType = 'array:' + property.data.itemSize + 'byte X ' + itemCount;
             break;
         case 'array':
             // display array header

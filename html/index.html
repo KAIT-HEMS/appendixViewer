@@ -43,6 +43,9 @@
       height: 80vh;
       overflow-y: scroll;
     }
+    .under {
+      text-decoration: underline blue;
+    }
   </style>
 </head>
 
@@ -159,7 +162,7 @@
                 </template>
                 <template v-else-if="appendix.propType === 'bitmap'">
                   <!-- <td class="col3">{{ appendix.range }}</td> -->
-                  <td class="col3" v-on:click="showBitmap(appendix.bitmap)">bitmap</td>
+                  <td class="col3 under" v-on:click="showBitmap(appendix.bitmap)">bitmap</td>
                 </template>
                 <template v-else>
                   <td class="col3">{{ appendix.range }}</td>
